@@ -1,0 +1,160 @@
+.card {
+  text-align: center;
+  position: relative;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--size-border-radius) + 2px);
+  opacity: 0.4;
+  color: var(--color-card-fg);
+  background-color: white;
+  overflow: hidden;
+}
+
+.card:focus-visible {
+  box-shadow: 0 0 0 5px white;
+}
+
+/*.card.selected {*/
+/*  opacity: 1;*/
+/*}*/
+
+.card.selected::before {
+  content: '';
+  position: absolute;
+  width: 150px;
+  height: 140%;
+  background: linear-gradient(#00ccff, blue);
+  animation: animate 4s linear infinite;
+}
+
+.card.selected::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: #1a1f33;
+  border-radius: 16px;
+}
+
+@keyframes animate {
+  0%
+  {
+    transform: rotate(0deg);
+  }
+  100%
+  {
+    transform: rotate(359deg);
+  }
+}
+
+.card.transition {
+  transition-property: opacity, transform;
+  transition-delay: var(--card-transition-delay, 0);
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  transform: scale(1.5) translateY(40px);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.card.transition.animate {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.imageHolder {
+  aspect-ratio: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-top-left-radius: var(--size-border-radius);
+  border-top-right-radius: var(--size-border-radius);
+  border-bottom-right-radius: 20px;
+  background-image: url(/img/icons/card-bg.svg),
+    linear-gradient(to bottom, var(--color-card-start), var(--color-card-end));
+}
+
+.emptyImage {
+  width: 25%;
+  opacity: 0.6;
+  filter: drop-shadow(0 7px 8px rgba(0, 0, 0, 0.5));
+}
+
+.characterImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+.characterImage[src*='diona'] {
+  object-position: left center;
+}
+
+.elementsContainer {
+  position: absolute;
+  inset: 0 auto auto 0;
+  padding: 0.125em;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.element {
+  width: var(--size-element);
+  height: var(--size-element);
+  filter: drop-shadow(0 0 4px var(--color-element));
+}
+
+.element[src*='anemo'] {
+  --color-element: var(--color-anemo);
+}
+
+.element[src*='cryo'] {
+  --color-element: var(--color-cryo);
+}
+
+.element[src*='dendro'] {
+  --color-element: var(--color-dendro);
+}
+
+.element[src*='electro'] {
+  --color-element: var(--color-electro);
+}
+
+.element[src*='geo'] {
+  --color-element: var(--color-geo);
+}
+
+.element[src*='hydro'] {
+  --color-element: var(--color-hydro);
+}
+
+.element[src*='pyro'] {
+  --color-element: var(--color-pyro);
+}
+
+.name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: white;
+  padding: 0.375em 1em;
+  border-bottom-left-radius: var(--size-border-radius);
+  border-bottom-right-radius: var(--size-border-radius);
+}
+
+.fiveStar {
+  --color-card-start: var(--color-5-star-start);
+  --color-card-end: var(--color-5-star-end);
+}
+
+.fourStar {
+  --color-card-start: var(--color-4-star-start);
+  --color-card-end: var(--color-4-star-end);
+}
+
+.collab {
+  --color-card-start: var(--color-collab-start);
+  --color-card-end: var(--color-collab-end);
+}
