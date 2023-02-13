@@ -1,27 +1,34 @@
-import { createLocalStore } from '../utils/utils';
-import { GenshinCharacter } from '../types/types';
-import { createStore } from 'solid-js/store';
+import {createLocalStore} from '~/utils/utils';
+import {GenshinCharacter} from '~/types/types';
+import {createStore} from 'solid-js/store';
+import {createSignal} from "solid-js";
 
-const preselectedCharacters: GenshinCharacter['id'][] = [
-  4, 5, 18, 25, 41, 39, 28,
-];
+const preselectedCharacters: GenshinCharacter['id'][] = [];
 
 const [filterElements, setFilterElements] = createStore<string[]>([]);
 
 const [filterRarity, setFilterRarity] = createStore<number[]>([]);
 
 const [selectedCharacters, setSelectedCharacters] = createLocalStore(
-  'selectedCharacters',
-  {
-    selectedCharacters: preselectedCharacters,
-  },
+    'selectedCharacters',
+    {
+        selectedCharacters: preselectedCharacters,
+    },
 );
 
+const [chosenCharacter, setChosenCharacter] = createSignal(0)
+
+const [targetCard, setTargetCard] = createSignal(0)
+
 export {
-  selectedCharacters,
-  setSelectedCharacters,
-  filterElements,
-  setFilterElements,
-  filterRarity,
-  setFilterRarity,
+    selectedCharacters,
+    setSelectedCharacters,
+    filterElements,
+    setFilterElements,
+    filterRarity,
+    setFilterRarity,
+    chosenCharacter,
+    setChosenCharacter,
+    targetCard,
+    setTargetCard,
 };

@@ -9,7 +9,7 @@ import {
 import styles from './Card.module.css';
 import { nextFrame, shuffle, slugify } from '~/utils/utils';
 import { GenshinCharacter } from '~/types/types';
-import { selectedCharacters } from '~/data/store';
+import {chosenCharacter, selectedCharacters, targetCard} from '~/data/store';
 
 interface ICard {
   onClick?: JSX.EventHandler<HTMLButtonElement, MouseEvent>;
@@ -31,9 +31,10 @@ const ShellCard: ParentComponent<IShellCard> = props => {
   return (
     <div
       style={{ '--card-transition-delay': `${(props.index ?? 0) * 100}ms` }}
-      class={`${styles.card} ${styles.selected} ${styles.transition}`}
+      class={`${styles.card} ${styles.transition}`}
       classList={{
         [styles.animate]: isMounted(),
+        [styles.target]: props.index === targetCard(),
       }}
     >
       {props.children}
@@ -97,6 +98,7 @@ const InteractiveCard: Component<IInteractiveCard> = props => {
         [styles.selected]: selectedCharacters.selectedCharacters.includes(
           props.character.id,
         ),
+        [styles.chosen]: chosenCharacter() === props.character.id,
       }}
       onClick={props.onClick}
       title={props.character.fullName}

@@ -4,7 +4,7 @@
   padding: 0;
   border: 0;
   border-radius: calc(var(--size-border-radius) + 2px);
-  opacity: 0.4;
+  opacity: 1;
   color: var(--color-card-fg);
   background-color: white;
   overflow: hidden;
@@ -14,36 +14,20 @@
   box-shadow: 0 0 0 5px white;
 }
 
-/*.card.selected {*/
-/*  opacity: 1;*/
-/*}*/
-
-.card.selected::before {
-  content: '';
-  position: absolute;
-  width: 150px;
-  height: 140%;
-  background: linear-gradient(#00ccff, blue);
-  animation: animate 4s linear infinite;
+.card.selected {
+  opacity: 0.4;
 }
 
-.card.selected::after {
-  content: '';
-  position: absolute;
-  inset: 4px;
-  background: #1a1f33;
-  border-radius: 16px;
+.card.target {
+  background: yellow;
+  box-shadow: 0 0 5px yellow, 0 0 25px yellow, 0 0 50px yellow, 0 0 200px yellow;
+  transition: 0.25s;
 }
 
-@keyframes animate {
-  0%
-  {
-    transform: rotate(0deg);
-  }
-  100%
-  {
-    transform: rotate(359deg);
-  }
+.card.chosen {
+  background: aqua;
+  box-shadow: 0 0 5px aqua, 0 0 25px aqua, 0 0 50px aqua, 0 0 200px aqua;
+  transition: 0.25s;
 }
 
 .card.transition {

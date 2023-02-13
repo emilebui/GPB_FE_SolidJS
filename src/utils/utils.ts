@@ -1,5 +1,7 @@
 import { createEffect } from 'solid-js';
 import { createStore, SetStoreFunction, Store } from 'solid-js/store';
+// @ts-ignore
+import { v4 } from "uuid";
 
 function slugify(str: string): string {
   return str.toLowerCase().replace(/\s+/g, '-');
@@ -26,6 +28,23 @@ function shuffle<T>(array: T[]): T[] {
   return array;
 }
 
+function getCID() {
+
+  let cid;
+
+  if (typeof window !== 'undefined') {
+    cid = localStorage.getItem("cid")
+  }
+
+  if (cid === null) {
+    let new_cid = v4();
+    localStorage.setItem("cid", new_cid);
+    return new_cid;
+  } else {
+    return cid;
+  }
+}
+
 function createLocalStore<T extends {}>(
   name: string,
   init: T,
@@ -47,4 +66,4 @@ function createLocalStore<T extends {}>(
   return [state, setState];
 }
 
-export { slugify, shuffle, nextFrame, createLocalStore };
+export { slugify, shuffle, nextFrame, createLocalStore, getCID };

@@ -1,6 +1,5 @@
-import { Component, createSignal, For } from 'solid-js';
+import {Component, createSignal, For, onMount} from 'solid-js';
 import styles from './App.module.css';
-
 import { Card } from '../Card';
 import { Button } from '../Button';
 import { Container } from '../Container';
@@ -11,9 +10,16 @@ import {
   filterRarity,
   selectedCharacters,
   setSelectedCharacters,
+  chosenCharacter,
+  setChosenCharacter,
 } from '~/data/store';
 import { GenshinCharacter, GenshinElement } from '~/types/types';
-import { shuffle } from '~/utils/utils';
+import {getCID, shuffle} from '~/utils/utils';
+import {LoadingMenu} from "~/components/App/LoadingMenu";
+import {useParams, useSearchParams} from "@solidjs/router";
+
+// @ts-ignore
+import { w3cwebsocket as WebSocket } from "websocket";
 
 const idToCard =
   (offset: number = 0) =>
@@ -25,7 +31,68 @@ const idToCard =
       />
     );
 
+// Error Message
+const InfoMsg = (i : number, s : string) => {
+  switch (i) {
+    case 0:
+      return (
+        <>
+          <h1>Waiting for other player...</h1>
+          <h3>Send this link to other player to join</h3>
+          <h4>${s}</h4>
+        </>
+      );
+    case 1:
+      return (
+          <>
+            <h1>Failed to connect</h1>
+            <h3>${s}</h3>
+          </>
+      );
+    case 2:
+      return (
+          <>
+            <h1>${s}</h1>
+          </>
+      );
+  }
+}
+
+
+
 const App: Component = () => {
+  const params = useParams();
+  const [sparams, setSparams] = useSearchParams();
+  const [loading, setLoading] = createSignal(false)
+  const [infoMsg, setInfoMsg] = createSignal(0)
+  const [msg, setMsg] = createSignal("");
+
+  const gid = params.gameid
+  const nickname = sparams.nickname
+  const cid = getCID()
+
+  const ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}`
+  console.log(ws_uri)
+  const client = new WebSocket(ws_uri)
+
+  // Game logic
+  const processMsg = (msg : string) => {
+    console.log(`got reply ${msg}`);
+    setMsg(msg);
+  }
+
+
+  onMount(async () => {
+    client.onopen = () => {
+      console.log("Connected to the game!");
+    };
+    client.onmessage = (message : any) => {
+      console.log(`got reply ${message}`);
+      processMsg(message.data)
+    }
+  })
+
+
   const [teams, setTeams] = createSignal<GenshinCharacter['id'][]>([]);
   const areAllCharatersSelected = () =>
     selectedCharacters.selectedCharacters.length === characters.length;
@@ -37,10 +104,10 @@ const App: Component = () => {
   const picklist2 = () => Array.from({ length: 8 }, (_, i) => teams()[i + 16]);
   const generateTeams = () => {
     const rnd = shuffle(Array.from(selectedCharacters.selectedCharacters));
-    setTeams(() => rnd.slice(0, 16));
+    setTeams(() => rnd.slice(0, 24));
   };
 
-  return (
+  return (loading()) ? (
     <>
       <main>
         <h1 class={styles.title}>Genshin Impact Ban Pick</h1>
@@ -50,16 +117,16 @@ const App: Component = () => {
             {banlist1().map(idToCard())}
           </div>
           <div class={`${styles.grid} ${styles.team}`}>
-            {banlist2().map(idToCard(8))}
+            {banlist2().map(idToCard(4))}
           </div>
         </div>
         <h3 class={styles.title}>Pick List</h3>
         <div class={styles.teams}>
           <div class={`${styles.grid} ${styles.team}`}>
-            {picklist1().map(idToCard())}
+            {picklist1().map(idToCard(8))}
           </div>
           <div class={`${styles.grid} ${styles.team}`}>
-            {picklist2().map(idToCard(8))}
+            {picklist2().map(idToCard(16))}
           </div>
         </div>
         <div class={styles.buttons}>
@@ -96,25 +163,7 @@ const App: Component = () => {
             {character => (
               <Card
                 onClick={() => {
-                  setSelectedCharacters(state => {
-                    if (state.selectedCharacters.includes(character.id)) {
-                      return {
-                        ...state,
-                        selectedCharacters: [
-                          ...state.selectedCharacters.filter(
-                            selected => selected !== character.id,
-                          ),
-                        ],
-                      };
-                    }
-                    return {
-                      ...state,
-                      selectedCharacters: [
-                        ...state.selectedCharacters,
-                        character.id,
-                      ],
-                    };
-                  });
+                  setChosenCharacter(character.id);
                 }}
                 character={character}
               />
@@ -123,7 +172,12 @@ const App: Component = () => {
         </div>
       </main>
     </>
-  );
+  ) : <LoadingMenu>
+    <h1>Loading game...</h1>
+
+
+
+  </LoadingMenu>;
 };
 
 export { App };
