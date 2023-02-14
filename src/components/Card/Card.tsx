@@ -30,7 +30,6 @@ const ShellCard: ParentComponent<IShellCard> = props => {
 
   return (
     <div
-      style={{ '--card-transition-delay': `${(props.index ?? 0) * 100}ms` }}
       class={`${styles.card} ${styles.transition}`}
       classList={{
         [styles.animate]: isMounted(),

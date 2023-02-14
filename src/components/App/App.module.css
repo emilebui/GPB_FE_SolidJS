@@ -31,6 +31,7 @@
   padding-inline: 1em;
   text-align: center;
   font-weight: 400;
+  margin-top: 10px;
 }
 
 .teams {
@@ -69,3 +70,41 @@
 }
 
 
+.avatars_container {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.avatar_box {
+  background: #2d3861;
+  width: 12%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  margin-left: 0;
+  padding: 20px;
+  gap: 10px;
+  border-radius: 10px;
+}
+
+.avatar_shadow {
+  filter: drop-shadow(0 0 15px limegreen);
+  transition: 0.5s;
+}
+
+.avatar_img {
+  width: 100px;
+  height: 100px;
+}
+
+.float_left {
+  left: 0;
+}
+
+.float_right {
+  right: 0;
+}

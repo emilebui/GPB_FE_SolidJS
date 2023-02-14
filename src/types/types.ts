@@ -1,18 +1,53 @@
 export type GenshinElement =
-  | 'anemo'
-  | 'cryo'
-  | 'dendro'
-  | 'electro'
-  | 'geo'
-  | 'hydro'
-  | 'pyro';
+    | 'anemo'
+    | 'cryo'
+    | 'dendro'
+    | 'electro'
+    | 'geo'
+    | 'hydro'
+    | 'pyro';
 
 export interface GenshinCharacter {
-  id: number;
-  fullName: string;
-  shortName: string;
-  stars: 4 | 5;
-  elements: GenshinElement[];
-  selected: boolean;
-  collab: boolean;
+    id: number;
+    fullName: string;
+    shortName: string;
+    stars: 4 | 5;
+    elements: GenshinElement[];
+    selected: boolean;
+    collab: boolean;
+}
+
+export interface Avatar {
+    id: number;
+    name: string;
+    path: string;
+}
+
+export enum MsgType {
+    GAME_STATE_UPDATE,
+    LOG,
+    MOVE_ERROR,
+    RECONNECT,
+    WAITING_PLAYER ,
+    DISCONNECT,
+    JOIN_GAME_ERROR,
+}
+
+export enum Side {
+    LEFT,
+    RIGHT
+}
+
+export interface ResMessage {
+    message: string;
+    type: number;
+    data: string;
+    info: any;
+}
+
+export interface Player {
+    pid: string;
+    nickname: string;
+    avatar: number;
+    side: number;
 }
