@@ -11,7 +11,7 @@ import {
     filterRarity,
     setChosenCharacter,
 } from '~/data/store';
-import {GenshinCharacter, GenshinElement, MsgType, ResMessage} from '~/types/types';
+import {GenshinElement, MsgType, ResMessage} from '~/types/types';
 import {getCID} from '~/utils/utils';
 import {LoadingMenu} from "~/components/App/LoadingMenu";
 import {useParams, useSearchParams} from "@solidjs/router";
@@ -23,16 +23,13 @@ import {AvatarBox, InfoMsg} from "~/game/game_display";
 import {EnableBtn, handleMsg} from "~/game/game_logic";
 import {Ban, Pick} from "~/game/game_move";
 
-const idToCard =
-    (offset: number = 0) =>
-        (id: GenshinCharacter['id'], index: number) =>
-            (
-                <Card
-                    index={index + offset}
-                    character={characters.find(c => c.id === id)}
-                />
-            );
 
+const id2Card = (id :number, index : number, offset : number = 0) => (
+    <Card
+        index={index + offset}
+        character={characters.find(c => c.id === id)}
+    />
+);
 
 const App: Component = () => {
     const params = useParams();
@@ -44,10 +41,9 @@ const App: Component = () => {
     const ava = sparams.ava
 
     const ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}`
-    console.log(ws_uri)
     const client = new WebSocket(ws_uri)
 
-    // Game display
+
 
     const LoadingMenuContent = (resMsg : ResMessage) => {
         let msg = resMsg.message;
@@ -84,19 +80,19 @@ const App: Component = () => {
                     <h3 class={styles.title}>Ban List</h3>
                     <div class={styles.teams}>
                         <div class={`${styles.grid} ${styles.team}`}>
-                            {banlist1.map(idToCard())}
+                            <For each={banlist1}>{(id, i) => id2Card(id, i())}</For>
                         </div>
                         <div class={`${styles.grid} ${styles.team}`}>
-                            {banlist2.map(idToCard(4))}
+                            <For each={banlist2}>{(id, i) => id2Card(id, i(), 4)}</For>
                         </div>
                     </div>
                     <h3 class={styles.title}>Pick List</h3>
                     <div class={styles.teams}>
                         <div class={`${styles.grid} ${styles.team}`}>
-                            {picklist1.map(idToCard(8))}
+                            <For each={picklist1}>{(id, i) => id2Card(id, i(), 8)}</For>
                         </div>
                         <div class={`${styles.grid} ${styles.team}`}>
-                            {picklist2.map(idToCard(16))}
+                            <For each={picklist2}>{(id, i) => id2Card(id, i(), 16)}</For>
                         </div>
                     </div>
                     <div class={styles.buttons}>
