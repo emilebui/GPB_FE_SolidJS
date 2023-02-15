@@ -146,3 +146,12 @@ body {
     width: 20px;
     left: 80%;
 }
+
+.ava_picker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 10px;
+}

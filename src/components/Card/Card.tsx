@@ -9,7 +9,8 @@ import {
 import styles from './Card.module.css';
 import { nextFrame, shuffle, slugify } from '~/utils/utils';
 import { GenshinCharacter } from '~/types/types';
-import {chosenCharacter, selectedCharacters, targetCard} from '~/data/store';
+import {chosenCharacter, targetCard} from '~/data/store';
+import {selectedCharacters} from "~/game/game_state";
 
 interface ICard {
   onClick?: JSX.EventHandler<HTMLButtonElement, MouseEvent>;
@@ -94,7 +95,7 @@ const InteractiveCard: Component<IInteractiveCard> = props => {
     <button
       class={styles.card}
       classList={{
-        [styles.selected]: selectedCharacters.selectedCharacters.includes(
+        [styles.selected]: selectedCharacters.includes(
           props.character.id,
         ),
         [styles.chosen]: chosenCharacter() === props.character.id,
@@ -134,7 +135,7 @@ const Card: Component<ICard> = props => {
   if (!props.character) {
     return (
       <ShellCard index={props.index}>
-        <EmptyCard />
+        <EmptyCard/>
       </ShellCard>
     );
   }

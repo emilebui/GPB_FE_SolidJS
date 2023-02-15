@@ -9,9 +9,12 @@ const [resMsg, setResMsg] = createStore<ResMessage>(EmptyMsg)
 const [playerTurn, setPlayerTurn] = createSignal("")
 const [loading, setLoading] = createSignal(false)
 
+const [pick, setPick] = createSignal(false)
+
 const [p1Info, setP1Info] = createStore<Player>({...EmptyPlayer, side: Side.LEFT})
 const [p2Info, setp2Info] = createStore<Player>({...EmptyPlayer, side: Side.RIGHT})
 
+const  [selectedCharacters, setSelectedCharacters] = createStore<GenshinCharacter['id'][]>([])
 const [banlist1, setBanList1] = createStore<GenshinCharacter['id'][]>(Array.from({length: 4}))
 const [banlist2, setBanList2] = createStore<GenshinCharacter['id'][]>(Array.from({length: 4}))
 const [picklist1, setPickList1] = createStore<GenshinCharacter['id'][]>(Array.from({length: 8}))
@@ -31,5 +34,13 @@ export {
     banlist1,
     banlist2,
     picklist1,
-    picklist2
+    picklist2,
+    setPickList2,
+    setBanList1,
+    setBanList2,
+    setPickList1,
+    selectedCharacters,
+    setSelectedCharacters,
+    pick,
+    setPick
 }

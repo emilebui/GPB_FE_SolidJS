@@ -1,0 +1,52 @@
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.popup-inner {
+    position: relative;
+    padding: 32px;
+    width: 70%;
+    background-color: #2d3861;
+    z-index: 2;
+    border-color: #4d4280;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px black;
+}
+
+.ava_grid {
+    display: grid;
+    grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--size-card-min-width), 1fr)
+  );
+    justify-content: center;
+    padding: 2rem 9rem;
+    gap: var(--size-grid-gap);
+}
+
+.ava_grid_team {
+    grid-template-columns: repeat(8, var(--size-card-min-width));
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(auto-fill, min(var(--size-card-min-width)));
+    }
+}
+
+.avatar_img {
+    width: 80px;
+    height: 80px;
+}

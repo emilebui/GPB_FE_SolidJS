@@ -28,7 +28,7 @@ export enum MsgType {
     LOG,
     MOVE_ERROR,
     RECONNECT,
-    WAITING_PLAYER ,
+    WAITING_PLAYER,
     DISCONNECT,
     JOIN_GAME_ERROR,
 }
@@ -50,4 +50,9 @@ export interface Player {
     nickname: string;
     avatar: number;
     side: number;
+}
+
+export interface Move {
+    call: string;
+    data: any;
 }

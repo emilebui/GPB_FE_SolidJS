@@ -48,6 +48,8 @@
   gap: 1rem;
 }
 
+.no_click {pointer-events: none;}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(
@@ -89,6 +91,13 @@
   padding: 20px;
   gap: 10px;
   border-radius: 10px;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.avatar_box h1 h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .avatar_shadow {

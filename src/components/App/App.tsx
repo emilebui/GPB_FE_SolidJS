@@ -1,4 +1,4 @@
-import {Component, createSignal, For, onMount} from 'solid-js';
+import {Component, For, onMount} from 'solid-js';
 import styles from './App.module.css';
 import {Card} from '../Card';
 import {Button} from '../Button';
@@ -6,15 +6,13 @@ import {Container} from '../Container';
 import {Filters} from '../Filters';
 import {characters} from '~/data/characters';
 import {
+    chosenCharacter,
     filterElements,
     filterRarity,
-    selectedCharacters,
-    setSelectedCharacters,
-    chosenCharacter,
     setChosenCharacter,
 } from '~/data/store';
 import {GenshinCharacter, GenshinElement, MsgType, ResMessage} from '~/types/types';
-import {getCID, shuffle} from '~/utils/utils';
+import {getCID} from '~/utils/utils';
 import {LoadingMenu} from "~/components/App/LoadingMenu";
 import {useParams, useSearchParams} from "@solidjs/router";
 
@@ -22,7 +20,8 @@ import {useParams, useSearchParams} from "@solidjs/router";
 import {w3cwebsocket as WebSocket} from "websocket";
 import {banlist1, banlist2, loading, p1Info, p2Info, picklist1, picklist2, playerTurn, resMsg} from "~/game/game_state";
 import {AvatarBox, InfoMsg} from "~/game/game_display";
-import {handleMsg} from "~/game/game_logic";
+import {EnableBtn, handleMsg} from "~/game/game_logic";
+import {Ban, Pick} from "~/game/game_move";
 
 const idToCard =
     (offset: number = 0) =>
@@ -35,15 +34,16 @@ const idToCard =
             );
 
 
-const App: Component = (props : any) => {
+const App: Component = () => {
     const params = useParams();
-    const [sparams, setSparams] = useSearchParams();
+    const [sparams, _] = useSearchParams();
 
     const gid = params.gameid
     const nickname = sparams.nickname
     const cid = getCID()
+    const ava = sparams.ava
 
-    const ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}`
+    const ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}`
     console.log(ws_uri)
     const client = new WebSocket(ws_uri)
 
@@ -71,15 +71,6 @@ const App: Component = (props : any) => {
         }
     })
 
-
-    const [teams, setTeams] = createSignal<GenshinCharacter['id'][]>([]);
-    const areAllCharatersSelected = () =>
-        selectedCharacters.selectedCharacters.length === characters.length;
-
-    const generateTeams = () => {
-        const rnd = shuffle(Array.from(selectedCharacters.selectedCharacters));
-        setTeams(() => rnd.slice(0, 24));
-    };
 
     return (
         <>
@@ -110,19 +101,27 @@ const App: Component = (props : any) => {
                     </div>
                     <div class={styles.buttons}>
                         <Button
-                            secondary
-                            onClick={() =>
-                                setSelectedCharacters(state => ({
-                                    ...state,
-                                    selectedCharacters: areAllCharatersSelected()
-                                        ? []
-                                        : characters.map(c => c.id),
-                                }))
+                            secondary={!EnableBtn(false)}
+                            onClick={
+                                () => Ban(client, chosenCharacter())
                             }
+                            disabled={!EnableBtn(false)}
+                            classList={{
+                                [styles.no_click]: !EnableBtn(false)
+                            }}
                         >
-                            {areAllCharatersSelected() ? 'Deselect' : 'Select'} all
+                            BAN
                         </Button>
-                        <Button onClick={generateTeams}>Generate teams</Button>
+                        <Button
+                            secondary={!EnableBtn(true)}
+                            onClick={
+                                () => Pick(client, chosenCharacter())
+                            }
+                            disabled={!EnableBtn(true)}
+                            classList={{
+                                [styles.no_click]: !EnableBtn(true)
+                            }}
+                        >PICK</Button>
                     </div>
                     <Container>
                         <Filters/>
