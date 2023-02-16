@@ -21,12 +21,9 @@ FROM node:alpine AS runner
 WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder /app/.solid ./.solid
+COPY --from=builder /app/.env ./
 
 EXPOSE 3000
 

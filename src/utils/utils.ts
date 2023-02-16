@@ -1,5 +1,3 @@
-import { createEffect } from 'solid-js';
-import { createStore, SetStoreFunction, Store } from 'solid-js/store';
 // @ts-ignore
 import { v4 } from "uuid";
 
@@ -45,25 +43,14 @@ function getCID() {
   }
 }
 
-function createLocalStore<T extends {}>(
-  name: string,
-  init: T,
-): [Store<T>, SetStoreFunction<T>] {
-
-  let localState;
-
-  if (typeof window !== 'undefined') {
-      localState = localStorage.getItem(name);
-  }
-
-
-  const [state, setState] = createStore<T>(
-    localState ? JSON.parse(localState) : init,
-  );
-
-  createEffect(() => localStorage.setItem(name, JSON.stringify(state)));
-
-  return [state, setState];
+function playSound(path : string) {
+  const audio = new Audio(path);
+  audio.play().then(_ => {})
 }
 
-export { slugify, shuffle, nextFrame, createLocalStore, getCID };
+function get_random(list : any) {
+  return list[Math.floor((Math.random()*list.length))];
+}
+
+
+export { slugify, shuffle, nextFrame, getCID, playSound, get_random };

@@ -1,6 +1,8 @@
 import {createStore} from "solid-js/store";
 import {GenshinCharacter, Player, ResMessage, Side} from "~/types/types";
 import {createSignal} from "solid-js";
+import {timeFlow} from "~/game/game_logic";
+import {MaxTimer} from "~/utils/const";
 
 const EmptyMsg = {type: -1, data: "", message: "", info: null}
 const EmptyPlayer = {pid: "", nickname: "", avatar: 1}
@@ -9,7 +11,10 @@ const [resMsg, setResMsg] = createStore<ResMessage>(EmptyMsg)
 const [playerTurn, setPlayerTurn] = createSignal("")
 const [loading, setLoading] = createSignal(false)
 
+const [timer, setTimer] = createSignal(MaxTimer)
 const [pick, setPick] = createSignal(false)
+
+const [gameEnded, setGameEnded] = createSignal(false)
 
 const [p1Info, setP1Info] = createStore<Player>({...EmptyPlayer, side: Side.LEFT})
 const [p2Info, setp2Info] = createStore<Player>({...EmptyPlayer, side: Side.RIGHT})
@@ -19,6 +24,7 @@ const [banlist1, setBanList1] = createStore<GenshinCharacter['id'][]>(Array.from
 const [banlist2, setBanList2] = createStore<GenshinCharacter['id'][]>(Array.from({length: 4}))
 const [picklist1, setPickList1] = createStore<GenshinCharacter['id'][]>(Array.from({length: 8}))
 const [picklist2, setPickList2] = createStore<GenshinCharacter['id'][]>(Array.from({length: 8}))
+
 
 export {
     resMsg,
@@ -42,5 +48,9 @@ export {
     selectedCharacters,
     setSelectedCharacters,
     pick,
-    setPick
+    setPick,
+    gameEnded,
+    setGameEnded,
+    timer,
+    setTimer
 }

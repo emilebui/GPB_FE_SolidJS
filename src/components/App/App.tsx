@@ -18,10 +18,22 @@ import {useParams, useSearchParams} from "@solidjs/router";
 
 // @ts-ignore
 import {w3cwebsocket as WebSocket} from "websocket";
-import {banlist1, banlist2, loading, p1Info, p2Info, picklist1, picklist2, playerTurn, resMsg} from "~/game/game_state";
+import {
+    banlist1,
+    banlist2, gameEnded,
+    loading,
+    p1Info,
+    p2Info,
+    picklist1,
+    picklist2,
+    playerTurn,
+    resMsg, setLoading,
+    setResMsg, timer
+} from "~/game/game_state";
 import {AvatarBox, InfoMsg} from "~/game/game_display";
-import {EnableBtn, handleMsg} from "~/game/game_logic";
+import {EnableBtn, handleMsg, timeFlow} from "~/game/game_logic";
 import {Ban, Pick} from "~/game/game_move";
+import {Toaster} from "solid-toast";
 
 
 const id2Card = (id :number, index : number, offset : number = 0) => (
@@ -43,8 +55,6 @@ const App: Component = () => {
     const ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}`
     const client = new WebSocket(ws_uri)
 
-
-
     const LoadingMenuContent = (resMsg : ResMessage) => {
         let msg = resMsg.message;
         if (resMsg.type === MsgType.WAITING_PLAYER) {
@@ -53,6 +63,9 @@ const App: Component = () => {
         return InfoMsg(resMsg.type, msg)
     }
 
+    setInterval( () => {
+        timeFlow(client)
+    }, 50);
 
     onMount(async () => {
         client.onopen = () => {
@@ -65,6 +78,13 @@ const App: Component = () => {
         client.onmessage = (message: any) => {
             handleMsg(message.data)
         }
+        client.onclose = () => {
+            setResMsg({
+                message: "Can't connect to server!",
+                type: MsgType.JOIN_GAME_ERROR,
+            })
+            setLoading(false)
+        }
     })
 
 
@@ -72,6 +92,16 @@ const App: Component = () => {
         <>
             {   loading() &&
                 <main>
+                    {
+                        gameEnded() &&
+                        <h1 class={`${styles.title} ${styles.game_ended}`}>The game has ended!</h1>
+                    }
+                    {   timer() > 0 &&
+                        <div class={styles.timer}>
+                            <p>Time Remaining</p>
+                            <h1>{Math.floor(timer()/20)+1}s</h1>
+                        </div>
+                    }
                     <h1 class={styles.title}>Genshin Impact Ban Pick</h1>
                     <div class={styles.avatars_container}>
                         {AvatarBox(p1Info, playerTurn())}
@@ -95,6 +125,7 @@ const App: Component = () => {
                             <For each={picklist2}>{(id, i) => id2Card(id, i(), 16)}</For>
                         </div>
                     </div>
+                    <Toaster/>
                     <div class={styles.buttons}>
                         <Button
                             secondary={!EnableBtn(false)}

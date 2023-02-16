@@ -1,21 +1,26 @@
 // All game logic is here
 
-import {MsgType, Player, ResMessage} from "~/types/types";
+import {GameStatus, MsgType, Player, ResMessage} from "~/types/types";
 import {parseResMsg} from "~/game/game_helper";
 import {
+    gameEnded,
     loading,
     p1Info,
     p2Info, pick, playerTurn, selectedCharacters,
-    setBanList1, setBanList2,
+    setBanList1, setBanList2, setGameEnded,
     setLoading,
     setP1Info,
     setp2Info, setPick, setPickList1, setPickList2,
     setPlayerTurn,
-    setResMsg, setSelectedCharacters
+    setResMsg, setSelectedCharacters, setTimer, timer
 } from "~/game/game_state";
 import {chosenCharacter, setTargetCard} from "~/data/store";
 import {TargetCard2TurnMap} from "~/data/turn_info";
-import {getCID} from "~/utils/utils";
+import {get_random, getCID, playSound} from "~/utils/utils";
+import {notify} from "~/game/game_display";
+import {characters} from "~/data/characters";
+import {Ban, Pick} from "~/game/game_move";
+import {MaxTimer} from "~/utils/const";
 
 const handleMsg = (data : string) => {
 
@@ -40,6 +45,10 @@ const processMsg = (data : ResMessage) => {
     }
 
     GameStateUpdate(data)
+    if (data.type === MsgType.GAME_STATE_UPDATE) {
+        setTimer(MaxTimer)
+    }
+
 }
 
 function GameStateUpdate(res : ResMessage) {
@@ -58,8 +67,20 @@ function GameStateUpdate(res : ResMessage) {
     // Update Selected Card
     SelectedCardUpdate(game_state)
 
-    //Update Pick
+    // Update Pick
     setPick(game_state.pick)
+
+    // Game Notification
+    GameNotification(game_state)
+
+    // Update Game Ended
+    GameEndUpdate(game_state)
+}
+
+function GameEndUpdate(gs : any) {
+    if (gs.status === GameStatus.ENDED) {
+        setGameEnded(true)
+    }
 }
 
 function SelectedCardUpdate(gs :any) {
@@ -120,39 +141,19 @@ const PlayerUpdate = (gs : any) => {
 
     // Update player 1
     if (p1Info.pid === "") {
-        const pid = gs.player_turn_map[1]
-        setP1Info("pid", pid)
-        const info = getPlayerInfo(pid, gs)
-        console.log(info)
-        setP1Info("nickname", info.nickname)
-        setP1Info("avatar", info.avatar)
+        setP1Info("pid", gs.player_1.cid)
+        setP1Info("nickname", gs.player_1.nickname)
+        setP1Info("avatar", gs.player_1.avatar)
     }
 
     // Update player 2
     if (p2Info.pid === "") {
-        const pid = gs.player_turn_map[2]
-        setp2Info("pid", pid)
-        const info = getPlayerInfo(pid, gs)
-        console.log(info)
-        setp2Info("nickname", info.nickname)
-        setp2Info("avatar", info.avatar)
+        setp2Info("pid", gs.player_2.cid)
+        setp2Info("nickname", gs.player_2.nickname)
+        setp2Info("avatar", gs.player_2.avatar)
     }
 
     setPlayerTurn(gs.player_turn)
-}
-
-function getPlayerInfo(cid : string, gs : any) {
-    if (gs.player_1.cid !== cid) {
-        return {
-            nickname: gs.player_2.nickname,
-            avatar: gs.player_2.avatar
-        }
-    } else {
-        return {
-            nickname: gs.player_1.nickname,
-            avatar: gs.player_1.avatar
-        }
-    }
 }
 
 function EnableBtn(b : boolean) {
@@ -168,6 +169,56 @@ function EnableBtn(b : boolean) {
     return pick() === b;
 }
 
+const GameNotification = (gs : any) => {
+    if (loading() && !gameEnded()) {
+
+        if (gs.status === GameStatus.ENDED) {
+            notify("The Game has ended!")
+            playSound("/sound/game_over.mp3")
+            return
+        }
+
+        if (gs.player_turn === getCID()) {
+            if (gs.pick) {
+                notify("Your turn to pick!")
+                playSound("/sound/you_pick.mp3")
+            } else {
+                notify("Your turn to ban!")
+                playSound("/sound/you_ban.mp3")
+            }
+        } else {
+            if (gs.pick) {
+                notify("Opponent turn to pick!")
+                playSound("/sound/enemy_pick.mp3")
+            } else {
+                notify("Opponent turn to ban!")
+                playSound("/sound/enemy_ban.mp3")
+            }
+        }
+    }
+}
+
+const RandomMove = (client : any) => {
+    if (loading() && !gameEnded() && playerTurn() == getCID()) {
+        const unpicked_cards = characters.filter(card => !selectedCharacters.includes(card.id))
+        const random_card = get_random(unpicked_cards)
+        if (pick()) {
+            Pick(client, random_card.id)
+        } else {
+            Ban(client, random_card.id)
+        }
+    }
+}
+
+const timeFlow = (client : any) => {
+    if (loading() && !gameEnded() && timer() > 0) {
+        setTimer(timer() - 1)
+
+        if (timer() === 0) {
+            RandomMove(client)
+        }
+    }
+}
 
 
-export {handleMsg, EnableBtn}
+export {handleMsg, EnableBtn, timeFlow}

@@ -3,6 +3,19 @@ import {Avatar, MsgType, Side} from "~/types/types";
 import {Avatars} from "~/data/avatars";
 import {getCID} from "~/utils/utils";
 import styles from "~/components/App/App.module.css";
+import {toast} from "solid-toast";
+
+
+const notify = (msg : string) => toast(msg, {
+    duration: 5000,
+    position: 'bottom-right',
+    style: {
+        'background-color': '#2d3861',
+        'z-index': 3,
+        'color': '#fff'
+    }
+});
+
 
 const InfoMsg = (i: number, s: string) => {
     switch (i) {
@@ -64,4 +77,4 @@ const AvatarBox = (p : any, player_turn: string) => {
     );
 }
 
-export {InfoMsg, AvatarBox}
+export {InfoMsg, AvatarBox, notify}

@@ -23,6 +23,13 @@ export interface Avatar {
     path: string;
 }
 
+export enum GameStatus {
+    WAITING ,
+    PLAYING,
+    ENDED,
+    HALT
+}
+
 export enum MsgType {
     GAME_STATE_UPDATE,
     LOG,

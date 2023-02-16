@@ -29,8 +29,12 @@ export default function AvatarPopup(props : any) {
 
     return (
         <>
-            {   props.trigger &&
-                <div class="popup">
+            {/*{   props.trigger &&*/}
+                <div class="popup"
+                    classList={{
+                        ["active"]: props.trigger
+                    }}
+                >
                     <div class="popup-inner">
                         {props.children}
                         <div class="ava_grid ava_grid_team">
@@ -38,7 +42,7 @@ export default function AvatarPopup(props : any) {
                         </div>
                     </div>
                 </div>
-            }
+            {/*}*/}
         </>
     );
 

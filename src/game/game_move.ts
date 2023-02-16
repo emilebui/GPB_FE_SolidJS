@@ -1,4 +1,5 @@
 import {Move} from "~/types/types";
+import {setTimer} from "~/game/game_state";
 
 function Ban(client : any, id : number) {
     const req : Move = {

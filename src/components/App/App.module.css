@@ -117,3 +117,36 @@
 .float_right {
   right: 0;
 }
+
+.timer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  z-index: 2;
+  top: 50%;
+}
+
+.game_ended {
+  bottom: 0;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: 3.5em;
+  margin-bottom: 5%;
+  color: white;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+  z-index: 2;
+  opacity: 0;
+  animation: fadein 1s ease-out forwards;
+}
+
+@keyframes fadein {
+  100% {
+    opacity: 1;
+  }
+}
