@@ -13,7 +13,6 @@ import {
     Title,
 } from "solid-start";
 import "./root.css";
-import styles from "~/components/App/App.module.css";
 
 export default function Root() {
     return (
@@ -22,7 +21,7 @@ export default function Root() {
                 <Title>Genshin Ban Pick</Title>
                 <Meta charset="utf-8"/>
                 <Meta name="viewport" content="width=device-width, initial-scale=1"/>
-                <link rel="shortcut icon" type="image/ico" href="/src/assets/favicon.ico" />
+                <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
             </Head>
             <Body>
                 <noscript>You need to enable JavaScript to run this app.</noscript>

@@ -24,10 +24,6 @@ import {MaxTimer} from "~/utils/const";
 
 const handleMsg = (data : string) => {
 
-    // Log
-    console.log(`got reply ${data}`);
-
-
     // handle response message object
     const msg_obj = parseResMsg(data)
     processMsg(msg_obj)
