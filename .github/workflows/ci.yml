@@ -15,6 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Test pwd
+        run: |
+          pwd
+          ls -lh
+          cat .env
+
       - name: Remove old env
         run: rm -f .env
 
@@ -23,6 +29,7 @@ jobs:
         with:
           VITE_WS_URI: ${{ secrets.DEV_WS_URI }}
           VITE_FE_URL: ${{ secrets.DEV_FE_URL }}
+          directory: .
           file_name: .env
           fail_on_empty: true
 
