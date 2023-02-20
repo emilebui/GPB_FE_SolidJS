@@ -1,4 +1,4 @@
-import {Component, For, onMount} from 'solid-js';
+import {Component, createSignal, For, onMount} from 'solid-js';
 import styles from './App.module.css';
 import {Card} from '../Card';
 import {Button} from '../Button';
@@ -11,7 +11,7 @@ import {
     filterRarity,
     setChosenCharacter,
 } from '~/data/store';
-import {GenshinElement, MsgType, ResMessage} from '~/types/types';
+import {ChatInfo, GenshinElement, MsgType, ResMessage} from '~/types/types';
 import {getCID} from '~/utils/utils';
 import {LoadingMenu} from "~/components/App/LoadingMenu";
 import {useParams, useSearchParams} from "@solidjs/router";
@@ -20,7 +20,7 @@ import {useParams, useSearchParams} from "@solidjs/router";
 import {w3cwebsocket as WebSocket} from "websocket";
 import {
     banlist1,
-    banlist2, gameEnded,
+    banlist2, chatHistory, gameEnded,
     loading,
     p1Info,
     p2Info,
@@ -32,7 +32,7 @@ import {
 } from "~/game/game_state";
 import {AvatarBox, InfoMsg} from "~/game/game_display";
 import {EnableBtn, handleMsg, timeFlow} from "~/game/game_logic";
-import {Ban, Pick} from "~/game/game_move";
+import {Ban, Chat, Pick} from "~/game/game_move";
 import {Toaster} from "solid-toast";
 
 
@@ -46,6 +46,8 @@ const id2Card = (id :number, index : number, offset : number = 0) => (
 const App: Component = () => {
     const params = useParams();
     const [sparams, _] = useSearchParams();
+    const [chatExpand, setChatExpand] = createSignal(false)
+    const [expandDisplay, setExpandDisplay] = createSignal(false)
 
     const gid = params.gameid
     const nickname = sparams.nickname
@@ -87,6 +89,39 @@ const App: Component = () => {
         }
     })
 
+    const chat = (e : any) => {
+        if (e.keyCode == 13 && e.shiftKey == false) {
+            const msg = e.currentTarget.value.trim();
+            Chat(client, msg)
+            e.preventDefault()
+            e.currentTarget.value = "";
+        }
+    }
+
+    const expandChat = () => {
+        setChatExpand(!chatExpand())
+        if (chatExpand()) {
+            setTimeout(() => setExpandDisplay(!expandDisplay()), 500)
+        } else {
+            setExpandDisplay(!expandDisplay())
+        }
+    }
+
+    const chatRender = (info : ChatInfo) => (
+        <div>
+            <span classList={{
+                [styles.span_p1]: info.cid === p1Info.pid,
+                [styles.span_p2]: info.cid === p2Info.pid,
+                [styles.span_you]: cid === info.cid,
+            }}
+            >{info.nickname}</span>
+            {
+                cid === info.cid &&
+                <span> (You)</span>
+            }
+            <span>: {info.message}</span>
+        </div>
+    );
 
     return (
         <>
@@ -106,6 +141,39 @@ const App: Component = () => {
                     <div class={styles.avatars_container}>
                         {AvatarBox(p1Info, playerTurn())}
                         {AvatarBox(p2Info, playerTurn())}
+                    </div>
+                    <div class={styles.chat_container}>
+                        <div class={styles.chat_box}
+                             classList={{
+                                 [styles.expanded]: chatExpand()
+                             }}
+                        >
+                            <div class={styles.chat_display}
+                                classList={{
+                                    [styles.expanded]: expandDisplay()
+                                }}
+                            >
+                                <div class={styles.chat_div}
+                                    classList={{
+                                        [styles.chat_hidden]: !expandDisplay()
+                                    }}>
+                                    <For each={chatHistory}>{info => chatRender(info)}</For>
+                                </div>
+                            </div>
+                            <textarea class={styles.chat_input} onKeyDown={e => chat(e)}/>
+                        </div>
+                        <button class={styles.chat_btn}
+                                classList={{
+                                    [styles.expanded]: chatExpand()
+                                }}
+                                onClick={() => expandChat()}>
+                            { !expandDisplay() &&
+                                <span>»</span>
+                            }
+                            { expandDisplay() &&
+                                <span>«</span>
+                            }
+                        </button>
                     </div>
                     <h3 class={styles.title}>Ban List</h3>
                     <div class={styles.teams}>

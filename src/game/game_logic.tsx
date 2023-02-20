@@ -1,13 +1,14 @@
 // All game logic is here
 
-import {GameStatus, MsgType, Player, ResMessage} from "~/types/types";
+import {ChatInfo, GameStatus, MsgType, Player, ResMessage} from "~/types/types";
 import {parseResMsg} from "~/game/game_helper";
 import {
+    chatHistory,
     gameEnded,
     loading,
     p1Info,
     p2Info, pick, playerTurn, selectedCharacters,
-    setBanList1, setBanList2, setGameEnded,
+    setBanList1, setBanList2, setChatHistory, setGameEnded,
     setLoading,
     setP1Info,
     setp2Info, setPick, setPickList1, setPickList2,
@@ -34,17 +35,28 @@ const handleMsg = (data : string) => {
 
 const processMsg = (data : ResMessage) => {
     if (data.type >= MsgType.WAITING_PLAYER) {
-        setLoading(false)
+        if (!gameEnded()) {
+            setLoading(false)
+        }
         return
     } else {
         setLoading(true)
     }
 
-    GameStateUpdate(data)
     if (data.type === MsgType.GAME_STATE_UPDATE) {
+        GameStateUpdate(data)
         setTimer(MaxTimer)
     }
 
+    if (data.type === MsgType.LOG) {
+        UpdateChatLog(data)
+    }
+
+}
+
+function UpdateChatLog(res : ResMessage) {
+    let chat_info : ChatInfo = JSON.parse(res.data)
+    setChatHistory([...chatHistory, chat_info])
 }
 
 function GameStateUpdate(res : ResMessage) {

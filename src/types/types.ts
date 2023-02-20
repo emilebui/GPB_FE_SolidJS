@@ -24,7 +24,7 @@ export interface Avatar {
 }
 
 export enum GameStatus {
-    WAITING ,
+    WAITING,
     PLAYING,
     ENDED,
     HALT
@@ -62,4 +62,10 @@ export interface Player {
 export interface Move {
     call: string;
     data: any;
+}
+
+export interface ChatInfo {
+    message: string;
+    cid: string;
+    nickname: string;
 }

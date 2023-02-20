@@ -64,7 +64,7 @@ const AvatarBox = (p : any, player_turn: string) => {
             [styles.float_left]: p.side === Side.LEFT,
             [styles.float_right]: p.side !== Side.LEFT,
         }}>
-            <h1>{who}</h1>
+            <h2>{who}</h2>
             <img class={styles.avatar_img}
                  classList={{
                      [styles.avatar_shadow]: p.pid === player_turn
@@ -72,7 +72,7 @@ const AvatarBox = (p : any, player_turn: string) => {
                  src={ava.path}
                  alt=""
             />
-            <h2>{p.nickname}</h2>
+            <h1>{p.nickname}</h1>
         </div>
     );
 }

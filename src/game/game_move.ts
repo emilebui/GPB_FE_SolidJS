@@ -17,4 +17,12 @@ function Pick(client : any, id : number) {
     client.send(JSON.stringify(req));
 }
 
-export {Ban, Pick}
+function Chat(client : any, msg : string) {
+    const req : Move = {
+        call: "CHAT",
+        data: msg
+    }
+    client.send(JSON.stringify(req))
+}
+
+export {Ban, Pick, Chat}

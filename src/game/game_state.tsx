@@ -1,5 +1,5 @@
 import {createStore} from "solid-js/store";
-import {GenshinCharacter, Player, ResMessage, Side} from "~/types/types";
+import {ChatInfo, GenshinCharacter, Player, ResMessage, Side} from "~/types/types";
 import {createSignal} from "solid-js";
 import {timeFlow} from "~/game/game_logic";
 import {MaxTimer} from "~/utils/const";
@@ -25,6 +25,7 @@ const [banlist2, setBanList2] = createStore<GenshinCharacter['id'][]>(Array.from
 const [picklist1, setPickList1] = createStore<GenshinCharacter['id'][]>(Array.from({length: 8}))
 const [picklist2, setPickList2] = createStore<GenshinCharacter['id'][]>(Array.from({length: 8}))
 
+const [chatHistory, setChatHistory] = createStore<ChatInfo[]>([])
 
 export {
     resMsg,
@@ -52,5 +53,7 @@ export {
     gameEnded,
     setGameEnded,
     timer,
-    setTimer
+    setTimer,
+    chatHistory,
+    setChatHistory
 }
