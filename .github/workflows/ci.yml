@@ -23,7 +23,6 @@ jobs:
         with:
           VITE_WS_URI: ${{ secrets.DEV_WS_URI }}
           VITE_FE_URL: ${{ secrets.DEV_FE_URL }}
-          directory: .
           file_name: .env
           fail_on_empty: true
 
