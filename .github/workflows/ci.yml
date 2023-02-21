@@ -21,14 +21,8 @@ jobs:
       - name: Create .env file
         uses: ozaytsev86/create-env-file@v1
         with:
-          ENV_ITE_WS_URI: ${{ secrets.DEV_WS_URI }}
+          ENV_VITE_WS_URI: ${{ secrets.DEV_WS_URI }}
           ENV_VITE_FE_URL: ${{ secrets.DEV_FE_URL }}
-
-      - name: Test pwd
-        run: |
-          pwd
-          ls -lh
-          cat .env
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
