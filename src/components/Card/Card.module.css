@@ -90,6 +90,8 @@
   filter: drop-shadow(0 0 4px var(--color-element));
 }
 
+.no_click {pointer-events: none;}
+
 .element[src*='anemo'] {
   --color-element: var(--color-anemo);
 }

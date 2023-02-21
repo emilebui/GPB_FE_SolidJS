@@ -1,0 +1,140 @@
+@font-face {
+    font-family: 'HYWenHei';
+    src: url('/fonts/HYWenHei.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --color-fg: #b9c6df;
+    --color-bg: #1a1f33;
+    --color-bg-dark: #080c1b;
+    --color-border: #2d3861;
+    --color-5-star-start: #83471b;
+    --color-5-star-end: #ab5c10;
+    --color-4-star-start: #4d4280;
+    --color-4-star-end: #935db1;
+    --color-collab-start: #862f37;
+    --color-collab-end: #a62a3a;
+    --color-empty-start: #565860;
+    --color-empty-end: #75787e;
+    --color-card-start: var(--color-empty-start);
+    --color-card-end: var(--color-empty-end);
+    --color-card-fg: #363f50;
+    --color-link-fg: #93b5f4;
+    --color-badge-fg: black;
+    --color-badge-bg: #ffc787;
+    --color-button-fg: var(--color-card-fg);
+    --color-button-bg: white;
+    --color-button-border: #ede5d8;
+    --color-button-secondary-fg: white;
+    --color-button-secondary-bg: var(--color-button-fg);
+    --color-button-secondary-border: #545d6d;
+
+    --color-anemo: #74c2a8;
+    --color-cryo: #9fd6e3;
+    --color-dendro: #a5c83b;
+    --color-electro: #af8ec1;
+    --color-geo: #fab632;
+    --color-hydro: #4cc2f1;
+    --color-pyro: #ef7938;
+
+    --size-border-radius: 6px;
+    --size-grid-gap: 10px;
+    --size-element: 12px;
+    --size-font: 10px;
+    --size-card-min-width: 64px;
+}
+
+@media (min-width: 768px) {
+    :root {
+        --size-element: 18px;
+        --size-font: 14px;
+        --size-card-min-width: 96px;
+    }
+}
+
+@media (min-width: 1024px) {
+    :root {
+        --size-element: 24px;
+        --size-font: 16px;
+        --size-card-min-width: 128px;
+    }
+}
+
+::-webkit-scrollbar {
+    width: initial;
+    height: initial;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--color-bg-dark);
+    border-radius: 100vmax;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-bg);
+    border-radius: 100vmax;
+    border: 3px solid var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-4-star-start);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    background-color: var(--color-bg-dark);
+    background-image: linear-gradient(
+            -10deg,
+            var(--color-bg-dark),
+            var(--color-bg)
+    );
+    color: var(--color-fg);
+    font-size: var(--size-font);
+    font-family: HYWenHei, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    overflow-y: scroll;
+}
+
+body {
+    margin: 0;
+}
+
+a {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--color-link-fg);
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    pointer-events: none;
+    user-select: none;
+}
+
+button {
+    all: unset;
+    cursor: pointer;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

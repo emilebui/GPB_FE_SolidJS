@@ -9,25 +9,37 @@ export default function Menu(props: any) {
     const [nickname, setNickname] = createSignal("");
     const [avaPopUp, setAvaPopUp] = createSignal(false);
 
+    const watch : boolean = props.watch || false
+
     const joinGame = () => {
         const gid = props.gid;
 
         if (nickname() === "") {
             setNickname(props.player)
         }
-        window.location.href = `/game/${gid}?nickname=${nickname()}&ava=${avatar()}`
+        let url = `/game/${gid}?nickname=${nickname()}&ava=${avatar()}`
+        if (watch) {
+            url = `/watch/${gid}?nickname=${nickname()}`
+        }
+
+        window.location.href = url
     }
 
     return (
         <>
             <div class="container">
                 {props.children}
-                <button onClick={() => setAvaPopUp(true)} class="ava_picker">
-                    {AvatarImage(Avatars[avatar()])}
-                    <span>Change Avatar</span>
-                </button>
-                <AvatarPopup trigger={avaPopUp()} setTrigger={setAvaPopUp}>
-                </AvatarPopup>
+                {
+                    !watch &&
+                    <>
+                        <button onClick={() => setAvaPopUp(true)} class="ava_picker">
+                            {AvatarImage(Avatars[avatar()])}
+                            <span>Change Avatar</span>
+                        </button>
+                        <AvatarPopup trigger={avaPopUp()} setTrigger={setAvaPopUp}>
+                        </AvatarPopup>
+                    </>
+                }
                 <div class="div">
                     <div class="inputBox">
                         <input
@@ -38,7 +50,14 @@ export default function Menu(props: any) {
                         <span>Nickname</span>
                     </div>
 
-                    <button class="btn" onClick={() => joinGame()}><span>Play</span><i></i></button>
+                    <button class="btn" onClick={() => joinGame()}>
+                    { !watch &&
+                        <span>Play</span>
+                    }
+                    { watch &&
+                        <span>Watch</span>
+                    }
+                    <i></i></button>
                 </div>
             </div>
         </>

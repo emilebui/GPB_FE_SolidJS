@@ -2,8 +2,8 @@ import { App } from '~/components/App';
 import './game.css';
 
 
-export default function GamePage() {
+export default function WatchPage() {
     return (
-        <App></App>
+        <App watch={true}></App>
     );
 }

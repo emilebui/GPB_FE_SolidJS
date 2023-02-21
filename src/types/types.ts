@@ -68,4 +68,5 @@ export interface ChatInfo {
     message: string;
     cid: string;
     nickname: string;
+    join_chat: boolean;
 }

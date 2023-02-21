@@ -1,6 +1,6 @@
 // All game logic is here
 
-import {ChatInfo, GameStatus, MsgType, Player, ResMessage} from "~/types/types";
+import {ChatInfo, GameStatus, MsgType, ResMessage} from "~/types/types";
 import {parseResMsg} from "~/game/game_helper";
 import {
     chatHistory,
@@ -28,19 +28,22 @@ const handleMsg = (data : string) => {
     // handle response message object
     const msg_obj = parseResMsg(data)
     processMsg(msg_obj)
-    setResMsg(msg_obj)
-    console.log(msg_obj)
 }
 
 
 const processMsg = (data : ResMessage) => {
+
     if (data.type >= MsgType.WAITING_PLAYER) {
         if (!gameEnded()) {
             setLoading(false)
         }
+        setResMsg(data)
         return
     } else {
-        setLoading(true)
+        if (data.type !== MsgType.LOG) {
+            setLoading(true)
+            setResMsg(data)
+        }
     }
 
     if (data.type === MsgType.GAME_STATE_UPDATE) {
@@ -195,11 +198,16 @@ const GameNotification = (gs : any) => {
                 playSound("/sound/you_ban.mp3")
             }
         } else {
+            let nickname = p2Info.nickname
+            if (gs.player_turn === p1Info.pid) {
+                nickname = p1Info.nickname
+            }
+
             if (gs.pick) {
-                notify("Opponent turn to pick!")
+                notify(`${nickname} turn to pick!`)
                 playSound("/sound/enemy_pick.mp3")
             } else {
-                notify("Opponent turn to ban!")
+                notify(`${nickname} turn to ban!`)
                 playSound("/sound/enemy_ban.mp3")
             }
         }

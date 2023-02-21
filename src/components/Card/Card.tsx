@@ -16,13 +16,14 @@ interface ICard {
   onClick?: JSX.EventHandler<HTMLButtonElement, MouseEvent>;
   character?: GenshinCharacter;
   index?: number;
+  disabled?: boolean;
 }
 
 type IShellCard = Pick<ICard, 'index'>;
 
 type IDisplayCard = ICard & Required<Pick<ICard, 'character'>>;
 
-type IInteractiveCard = Required<Pick<ICard, 'character' | 'onClick'>>;
+type IInteractiveCard = Required<Pick<ICard, 'character' | 'onClick' | 'disabled'>>;
 
 const ShellCard: ParentComponent<IShellCard> = props => {
   const [isMounted, setIsMounted] = createSignal(false);
@@ -99,9 +100,11 @@ const InteractiveCard: Component<IInteractiveCard> = props => {
           props.character.id,
         ),
         [styles.chosen]: chosenCharacter() === props.character.id,
+        [styles.no_click]: props.disabled
       }}
       onClick={props.onClick}
       title={props.character.fullName}
+      disabled={props.disabled}
     >
       <div
         class={styles.imageHolder}
@@ -147,7 +150,7 @@ const Card: Component<ICard> = props => {
     );
   }
   return (
-    <InteractiveCard onClick={props.onClick} character={props.character} />
+    <InteractiveCard onClick={props.onClick} character={props.character} disabled={props.disabled || false} />
   );
 };
 

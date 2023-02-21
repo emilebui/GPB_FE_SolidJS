@@ -43,6 +43,10 @@ function getCID() {
   }
 }
 
+function newCID() : (string) {
+  return v4()
+}
+
 function playSound(path : string) {
   const audio = new Audio(path);
   audio.play().then(_ => {})
@@ -53,4 +57,4 @@ function get_random(list : any) {
 }
 
 
-export { slugify, shuffle, nextFrame, getCID, playSound, get_random };
+export { slugify, shuffle, nextFrame, getCID, playSound, get_random, newCID };

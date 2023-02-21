@@ -12,7 +12,7 @@ import {
     setChosenCharacter,
 } from '~/data/store';
 import {ChatInfo, GenshinElement, MsgType, ResMessage} from '~/types/types';
-import {getCID} from '~/utils/utils';
+import {getCID, newCID} from '~/utils/utils';
 import {LoadingMenu} from "~/components/App/LoadingMenu";
 import {useParams, useSearchParams} from "@solidjs/router";
 
@@ -30,7 +30,7 @@ import {
     resMsg, setLoading,
     setResMsg, timer
 } from "~/game/game_state";
-import {AvatarBox, InfoMsg} from "~/game/game_display";
+import {AvatarBox, InfoMsg, notify} from "~/game/game_display";
 import {EnableBtn, handleMsg, timeFlow} from "~/game/game_logic";
 import {Ban, Chat, Pick} from "~/game/game_move";
 import {Toaster} from "solid-toast";
@@ -43,7 +43,11 @@ const id2Card = (id :number, index : number, offset : number = 0) => (
     />
 );
 
-const App: Component = () => {
+interface AppProps {
+    watch? : boolean;
+}
+
+const App: Component<AppProps> = (props) => {
     const params = useParams();
     const [sparams, _] = useSearchParams();
     const [chatExpand, setChatExpand] = createSignal(false)
@@ -51,18 +55,29 @@ const App: Component = () => {
 
     const gid = params.gameid
     const nickname = sparams.nickname
-    const cid = getCID()
+    let cid = getCID()
     const ava = sparams.ava
+    const watch : boolean = props.watch || false
 
-    const ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}`
+    if (watch) {
+        cid = newCID()
+    }
+
+    let ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}`
+
+    if (watch) {
+        ws_uri = `${import.meta.env.VITE_WS_URI}/watch?gid=${gid}&cid=${cid}&nickname=${nickname}`
+    }
+
+
     const client = new WebSocket(ws_uri)
 
     const LoadingMenuContent = (resMsg : ResMessage) => {
         let msg = resMsg.message;
         if (resMsg.type === MsgType.WAITING_PLAYER) {
-            msg = `${import.meta.env.VITE_FE_URL}/join/${gid}`
+            msg = gid
         }
-        return InfoMsg(resMsg.type, msg)
+        return InfoMsg(resMsg.type, msg, watch)
     }
 
     setInterval( () => {
@@ -109,19 +124,35 @@ const App: Component = () => {
 
     const chatRender = (info : ChatInfo) => (
         <div>
-            <span classList={{
-                [styles.span_p1]: info.cid === p1Info.pid,
-                [styles.span_p2]: info.cid === p2Info.pid,
-                [styles.span_you]: cid === info.cid,
-            }}
-            >{info.nickname}</span>
-            {
+            { !info.join_chat &&
+                <>
+                <span classList={{
+                    [styles.span_p1]: info.cid === p1Info.pid,
+                    [styles.span_p2]: info.cid === p2Info.pid,
+                    [styles.span_you]: cid === info.cid,
+                }}
+                >{info.nickname}</span>
+                {
                 cid === info.cid &&
                 <span> (You)</span>
+                }
+                <span>: {info.message}</span>
+                </>
             }
-            <span>: {info.message}</span>
+            {
+                info.join_chat &&
+                <span>
+                    {info.message}
+                </span>
+            }
         </div>
     );
+
+    const copyWatchLink = () => {
+        navigator.clipboard.writeText(`${import.meta.env.VITE_FE_URL}/spectate/${gid}`).then(
+            () => notify("The watch link has been copied to clipboard.")
+        )
+    }
 
     return (
         <>
@@ -139,8 +170,8 @@ const App: Component = () => {
                     }
                     <h1 class={styles.title}>Genshin Impact Ban Pick</h1>
                     <div class={styles.avatars_container}>
-                        {AvatarBox(p1Info, playerTurn())}
-                        {AvatarBox(p2Info, playerTurn())}
+                        {AvatarBox(p1Info, playerTurn(), watch)}
+                        {AvatarBox(p2Info, playerTurn(), watch)}
                     </div>
                     <div class={styles.chat_container}>
                         <div class={styles.chat_box}
@@ -157,6 +188,9 @@ const App: Component = () => {
                                     classList={{
                                         [styles.chat_hidden]: !expandDisplay()
                                     }}>
+                                    <div>
+                                        <span>Click </span><a onClick={() => copyWatchLink()} href="#">here</a><span> to let other watch the game</span>
+                                    </div>
                                     <For each={chatHistory}>{info => chatRender(info)}</For>
                                 </div>
                             </div>
@@ -239,6 +273,7 @@ const App: Component = () => {
                                         setChosenCharacter(character.id);
                                     }}
                                     character={character}
+                                    disabled={watch}
                                 />
                             )}
                         </For>

@@ -17,7 +17,7 @@ const notify = (msg : string) => toast(msg, {
 });
 
 
-const InfoMsg = (i: number, s: string) => {
+const InfoMsg = (i: number, s: string, watch : boolean) => {
     switch (i) {
         default:
             return (
@@ -27,8 +27,14 @@ const InfoMsg = (i: number, s: string) => {
             return (
                 <>
                     <h1>Waiting for other player...</h1>
-                    <h3>Send this link to other player to join</h3>
-                    <h4>{s}</h4>
+                    { !watch &&
+                        <>
+                            <h3>Send this link to other player to join</h3>
+                            <h3>{`${import.meta.env.VITE_FE_URL}/join/${s}`}</h3>
+                        </>
+                    }
+                    <h4>To let other watch the game, use this link</h4>
+                    <h4>{`${import.meta.env.VITE_FE_URL}/spectate/${s}`}</h4>
                 </>
             );
         case MsgType.JOIN_GAME_ERROR:
@@ -48,10 +54,11 @@ const InfoMsg = (i: number, s: string) => {
 }
 
 // Avatar
-const AvatarBox = (p : any, player_turn: string) => {
+const AvatarBox = (p : any, player_turn: string, watch : boolean) => {
 
     // @ts-ignore
     const ava : Avatar = Avatars.find(a => a.id === p.avatar)
+
     let who = "Opponent"
 
 
@@ -64,7 +71,10 @@ const AvatarBox = (p : any, player_turn: string) => {
             [styles.float_left]: p.side === Side.LEFT,
             [styles.float_right]: p.side !== Side.LEFT,
         }}>
-            <h2>{who}</h2>
+            {
+                !watch &&
+                <h2>{who}</h2>
+            }
             <img class={styles.avatar_img}
                  classList={{
                      [styles.avatar_shadow]: p.pid === player_turn
