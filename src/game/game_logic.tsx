@@ -28,6 +28,7 @@ const handleMsg = (data : string) => {
     // handle response message object
     const msg_obj = parseResMsg(data)
     processMsg(msg_obj)
+    console.log(msg_obj)
 }
 
 

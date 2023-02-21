@@ -250,4 +250,5 @@
 .chat_div {
   transform: rotate(180deg);
   direction: ltr;
+  overflow-wrap: break-word;
 }

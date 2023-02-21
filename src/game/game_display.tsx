@@ -17,7 +17,7 @@ const notify = (msg : string) => toast(msg, {
 });
 
 
-const InfoMsg = (i: number, s: string, watch : boolean) => {
+const InfoMsg = (i: number, s: string, watch : boolean, gid? : string) => {
     switch (i) {
         default:
             return (
@@ -48,6 +48,8 @@ const InfoMsg = (i: number, s: string, watch : boolean) => {
             return (
                 <>
                     <h1>{s}</h1>
+                    <h3>Send this link to that player for reconnection</h3>
+                    <h3>{`${import.meta.env.VITE_FE_URL}/game/${gid}`}</h3>
                 </>
             );
     }

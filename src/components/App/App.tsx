@@ -77,6 +77,9 @@ const App: Component<AppProps> = (props) => {
         if (resMsg.type === MsgType.WAITING_PLAYER) {
             msg = gid
         }
+        if (resMsg.type === MsgType.DISCONNECT) {
+            return InfoMsg(resMsg.type, msg, watch, gid)
+        }
         return InfoMsg(resMsg.type, msg, watch)
     }
 
@@ -162,7 +165,7 @@ const App: Component<AppProps> = (props) => {
                         gameEnded() &&
                         <h1 class={`${styles.title} ${styles.game_ended}`}>The game has ended!</h1>
                     }
-                    {   timer() > 0 &&
+                    {   (timer() > 0 && !gameEnded()) &&
                         <div class={styles.timer}>
                             <p>Time Remaining</p>
                             <h1>{Math.floor(timer()/20)+1}s</h1>
