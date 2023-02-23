@@ -6,7 +6,7 @@ export default function Spectate() {
     const gid = params.gameid
 
     return (
-          <Menu player="Player2" gid={gid} watch={true}>
+          <Menu player="Anonymous" gid={gid} watch={true}>
               <h1>Enter your nickname and watch the game !!!</h1>
           </Menu>
     );

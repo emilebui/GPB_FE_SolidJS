@@ -201,7 +201,7 @@ const App: Component<AppProps> = (props) => {
                                         [styles.chat_hidden]: !expandDisplay()
                                     }}>
                                     <div>
-                                        <span>Click </span><a onClick={() => copyWatchLink()} href="#">here</a><span> to let other watch the game</span>
+                                        <span>Click </span><a onClick={() => copyWatchLink()} href="javascript:">here</a><span> to let other watch the game</span>
                                     </div>
                                     <For each={chatHistory}>{info => chatRender(info)}</For>
                                 </div>
