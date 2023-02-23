@@ -72,6 +72,7 @@ const App: Component<AppProps> = (props) => {
 
     const client = new WebSocket(ws_uri)
 
+
     const LoadingMenuContent = (resMsg : ResMessage) => {
         let msg = resMsg.message;
         if (resMsg.type === MsgType.WAITING_PLAYER) {
@@ -105,7 +106,15 @@ const App: Component<AppProps> = (props) => {
             })
             setLoading(false)
         }
+        setInterval(
+            () => {
+                // Keep-alive ping
+                client.send("")
+            }, 15000
+        );
     })
+
+
 
     const chat = (e : any) => {
         if (e.keyCode == 13 && e.shiftKey == false) {
