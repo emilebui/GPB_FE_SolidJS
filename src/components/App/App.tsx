@@ -174,12 +174,6 @@ const App: Component<AppProps> = (props) => {
                         gameEnded() &&
                         <h1 class={`${styles.title} ${styles.game_ended}`}>The game has ended!</h1>
                     }
-                    {   (timer() > 0 && !gameEnded()) &&
-                        <div class={styles.timer}>
-                            <p>Time Remaining</p>
-                            <h1>{Math.floor(timer()/20)+1}s</h1>
-                        </div>
-                    }
                     <h1 class={styles.title}>Genshin Impact Ban Pick</h1>
                     <div class={styles.avatars_container}>
                         {AvatarBox(p1Info, playerTurn(), watch)}
@@ -226,6 +220,9 @@ const App: Component<AppProps> = (props) => {
                         <div class={`${styles.grid} ${styles.team}`}>
                             <For each={banlist1}>{(id, i) => id2Card(id, i())}</For>
                         </div>
+                        <div class={`${styles.timer2} ${styles.chat_hidden}`}>
+                            <p>Time Remaining</p>
+                        </div>
                         <div class={`${styles.grid} ${styles.team}`}>
                             <For each={banlist2}>{(id, i) => id2Card(id, i(), 4)}</For>
                         </div>
@@ -234,6 +231,14 @@ const App: Component<AppProps> = (props) => {
                     <div class={styles.teams}>
                         <div class={`${styles.grid} ${styles.team}`}>
                             <For each={picklist1}>{(id, i) => id2Card(id, i(), 8)}</For>
+                        </div>
+                        <div class={styles.timer2}
+                            classList={{
+                                [styles.chat_hidden]: !(timer() > 0 && !gameEnded())
+                            }}
+                        >
+                            <p>Time Remaining</p>
+                            <h1>{Math.floor(timer() / 20) + 1}s</h1>
                         </div>
                         <div class={`${styles.grid} ${styles.team}`}>
                             <For each={picklist2}>{(id, i) => id2Card(id, i(), 16)}</For>

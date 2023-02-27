@@ -57,7 +57,7 @@
     minmax(var(--size-card-min-width), 1fr)
   );
   justify-content: center;
-  padding: 2rem 9rem;
+  padding: 2rem 2rem;
   gap: var(--size-grid-gap);
 }
 
@@ -80,7 +80,7 @@
 
 .avatar_box {
   background: #2d3861;
-  width: 12%;
+  max-width: 210px;
   display: flex;
   text-align: center;
   align-items: center;
@@ -91,11 +91,14 @@
   padding: 20px;
   gap: 10px;
   border-radius: 10px;
-  flex-wrap: wrap;
   overflow: hidden;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #1d285d;
 }
 
 .avatar_box h1 h3 {
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -106,8 +109,10 @@
 }
 
 .avatar_img {
-  width: 100px;
-  height: 100px;
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  object-position: bottom center;
 }
 
 .float_left {
@@ -127,6 +132,14 @@
   width: 100%;
   z-index: 2;
   top: 50%;
+}
+
+.timer2 {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .game_ended {
