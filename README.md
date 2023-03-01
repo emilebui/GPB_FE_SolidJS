@@ -10,7 +10,7 @@
 
 ## Installation Instructions
 
-## Requirements
+### Requirements
 - git
 - nodejs
 
