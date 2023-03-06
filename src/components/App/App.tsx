@@ -50,8 +50,8 @@ interface AppProps {
 const App: Component<AppProps> = (props) => {
     const params = useParams();
     const [sparams, _] = useSearchParams();
-    const [chatExpand, setChatExpand] = createSignal(false)
-    const [expandDisplay, setExpandDisplay] = createSignal(false)
+    const [chatExpand, setChatExpand] = createSignal(true)
+    const [expandDisplay, setExpandDisplay] = createSignal(true)
 
     const gid = params.gameid
     const nickname = sparams.nickname
