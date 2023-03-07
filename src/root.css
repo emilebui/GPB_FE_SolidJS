@@ -63,6 +63,22 @@
   }
 }
 
+@media (-webkit-device-pixel-ratio: 1.25) {
+  body {
+      -moz-transform: scale(0.85, 0.85); /* Moz-browsers */
+      zoom: 0.85; /* Other non-webkit browsers */
+      zoom: 85%; /* Webkit browsers */
+  }
+}
+
+@media (-webkit-device-pixel-ratio: 1.5) {
+  body {
+    -moz-transform: scale(0.7, 0.7); /* Moz-browsers */
+    zoom: 0.7; /* Other non-webkit browsers */
+    zoom: 70%; /* Webkit browsers */
+  }
+}
+
 ::-webkit-scrollbar {
   width: initial;
   height: initial;
