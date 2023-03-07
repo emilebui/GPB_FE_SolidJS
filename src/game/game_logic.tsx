@@ -224,11 +224,10 @@ const GameNotification = (gs : any) => {
             }
         } else {
             let nickname = p2Info.nickname
-            UpdateGame(nickname, gs)
             if (gs.player_turn === p1Info.pid) {
                 nickname = p1Info.nickname
             }
-
+            UpdateGame(nickname, gs)
             if (gs.pick) {
                 notify(`${nickname} turn to pick!`)
                 playSound("/sound/enemy_pick.mp3")
