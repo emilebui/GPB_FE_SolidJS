@@ -4,6 +4,8 @@ import {Avatars} from "~/data/avatars";
 import {getCID} from "~/utils/utils";
 import styles from "~/components/App/App.module.css";
 import {toast} from "solid-toast";
+import {setAnnounceBody, setAnnounceDisplay} from "~/game/game_state";
+import {JSX} from "solid-js";
 
 
 const notify = (msg : string) => toast(msg, {
@@ -89,4 +91,19 @@ const AvatarBox = (p : any, player_turn: string, watch : boolean) => {
     );
 }
 
-export {InfoMsg, AvatarBox, notify}
+const annouceGameStarted = ( player : string ) => {
+    annouceContent(
+        <>
+            <h1>Game Started</h1>
+            <h3>{`${player} will go first!!`}</h3>
+        </>
+    )
+}
+
+const annouceContent = (body : JSX.Element) => {
+    setAnnounceBody(body)
+    setAnnounceDisplay(true)
+    setTimeout(() => setAnnounceDisplay(false), 3000)
+}
+
+export {InfoMsg, AvatarBox, notify, annouceGameStarted}

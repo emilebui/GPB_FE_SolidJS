@@ -1,0 +1,34 @@
+.popup2 {
+    position: fixed;
+    padding: 32px;
+    gap: 10px;
+    height: 200px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    left: 50%;
+    top: 50%;
+    margin-top: -100px; /* Negative half of height. */
+    margin-left: -250px; /* Negative half of width. */
+    background-color: #2d3861;
+    z-index: 3;
+    border-color: #4d4280;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px black;
+    overflow: auto;
+    opacity: 0;
+    transition: 300ms;
+    transform: scale(0);
+    transform-origin: center;
+}
+
+.popup2.active {
+    opacity: 1;
+    transition: 300ms;
+    transform: scale(1);
+    transform-origin: center;
+}
