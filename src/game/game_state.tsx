@@ -27,6 +27,9 @@ const [picklist2, setPickList2] = createStore<GenshinCharacter['id'][]>(Array.fr
 
 const [chatHistory, setChatHistory] = createStore<ChatInfo[]>([])
 
+const [announceDisplay, setAnnounceDisplay] = createSignal(false)
+const [annouceBody, setAnnounceBody] = createSignal((<></>))
+
 export {
     resMsg,
     setResMsg,
@@ -55,5 +58,9 @@ export {
     timer,
     setTimer,
     chatHistory,
-    setChatHistory
+    setChatHistory,
+    announceDisplay,
+    annouceBody,
+    setAnnounceBody,
+    setAnnounceDisplay,
 }

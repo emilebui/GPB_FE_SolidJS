@@ -18,7 +18,7 @@ import {
 import {chosenCharacter, setTargetCard} from "~/data/store";
 import {TargetCard2TurnMap} from "~/data/turn_info";
 import {get_random, getCID, playSound} from "~/utils/utils";
-import {notify} from "~/game/game_display";
+import {annouceGameStarted, notify} from "~/game/game_display";
 import {characters} from "~/data/characters";
 import {Ban, Pick} from "~/game/game_move";
 import {MaxTimer} from "~/utils/const";
@@ -49,7 +49,6 @@ const processMsg = (data : ResMessage) => {
 
     if (data.type === MsgType.GAME_STATE_UPDATE) {
         GameStateUpdate(data)
-        setTimer(MaxTimer)
     }
 
     if (data.type === MsgType.LOG) {
@@ -87,6 +86,13 @@ function GameStateUpdate(res : ResMessage) {
 
     // Update Game Ended
     GameEndUpdate(game_state)
+
+    // Update Timer
+    if (checkNewGame(game_state)) {
+        setTimer(MaxTimer + 60)
+    } else {
+        setTimer(MaxTimer)
+    }
 }
 
 function GameEndUpdate(gs : any) {
@@ -181,6 +187,23 @@ function EnableBtn(b : boolean) {
     return pick() === b;
 }
 
+const checkNewGame = (gs : any) => {
+    if (gs.board.p_1_ban === null) {
+        return true
+    } else {
+        console.log(gs.board.p_1_ban)
+        return false
+    }
+}
+
+
+
+const UpdateGame = (player : string, gs : any) => {
+    if (checkNewGame(gs)) {
+        setTimeout(() => annouceGameStarted(player), 100)
+    }
+}
+
 const GameNotification = (gs : any) => {
     if (loading() && !gameEnded()) {
 
@@ -191,6 +214,7 @@ const GameNotification = (gs : any) => {
         }
 
         if (gs.player_turn === getCID()) {
+            UpdateGame("You", gs)
             if (gs.pick) {
                 notify("Your turn to pick!")
                 playSound("/sound/you_pick.mp3")
@@ -200,6 +224,7 @@ const GameNotification = (gs : any) => {
             }
         } else {
             let nickname = p2Info.nickname
+            UpdateGame(nickname, gs)
             if (gs.player_turn === p1Info.pid) {
                 nickname = p1Info.nickname
             }

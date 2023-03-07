@@ -19,6 +19,8 @@ import {useParams, useSearchParams} from "@solidjs/router";
 // @ts-ignore
 import {w3cwebsocket as WebSocket} from "websocket";
 import {
+    annouceBody,
+    announceDisplay,
     banlist1,
     banlist2, chatHistory, gameEnded,
     loading,
@@ -34,6 +36,7 @@ import {AvatarBox, InfoMsg, notify} from "~/game/game_display";
 import {EnableBtn, handleMsg, timeFlow} from "~/game/game_logic";
 import {Ban, Chat, Pick} from "~/game/game_move";
 import {Toaster} from "solid-toast";
+import AnnoucePopup from "~/components/App/AnouncePopup";
 
 
 const id2Card = (id :number, index : number, offset : number = 0) => (
@@ -42,6 +45,7 @@ const id2Card = (id :number, index : number, offset : number = 0) => (
         character={characters.find(c => c.id === id)}
     />
 );
+
 
 interface AppProps {
     watch? : boolean;
@@ -174,6 +178,7 @@ const App: Component<AppProps> = (props) => {
                         gameEnded() &&
                         <h1 class={`${styles.title} ${styles.game_ended}`}>The game has ended!</h1>
                     }
+                    <AnnoucePopup active={announceDisplay()}>{annouceBody()}</AnnoucePopup>
                     <h1 class={styles.title}>Genshin Impact Ban Pick</h1>
                     <div class={styles.avatars_container}>
                         {AvatarBox(p1Info, playerTurn(), watch)}
