@@ -32,7 +32,7 @@ import {
     resMsg, setLoading,
     setResMsg, timer
 } from "~/game/game_state";
-import {AvatarBox, InfoMsg, notify} from "~/game/game_display";
+import {AvatarBox, copyLink, InfoMsg} from "~/game/game_display";
 import {EnableBtn, handleMsg, timeFlow} from "~/game/game_logic";
 import {Ban, Chat, Pick} from "~/game/game_move";
 import {Toaster} from "solid-toast";
@@ -165,9 +165,7 @@ const App: Component<AppProps> = (props) => {
     );
 
     const copyWatchLink = () => {
-        navigator.clipboard.writeText(`${import.meta.env.VITE_FE_URL}/spectate/${gid}`).then(
-            () => notify("The watch link has been copied to clipboard.")
-        )
+        copyLink(`${import.meta.env.VITE_FE_URL}/spectate/${gid}`)
     }
 
     return (
@@ -306,6 +304,7 @@ const App: Component<AppProps> = (props) => {
                 !loading() &&
                 <LoadingMenu>
                     {LoadingMenuContent(resMsg)}
+                    <Toaster/>
                 </LoadingMenu>
             }
         </>

@@ -18,6 +18,11 @@ const notify = (msg : string) => toast(msg, {
     }
 });
 
+const copyLink = (link : string) => {
+    navigator.clipboard.writeText(link).then(
+        () => notify("The link has been copied to clipboard.")
+    )
+}
 
 const InfoMsg = (i: number, s: string, watch : boolean, gid? : string) => {
     switch (i) {
@@ -26,17 +31,26 @@ const InfoMsg = (i: number, s: string, watch : boolean, gid? : string) => {
                 <h1>Loading game...</h1>
             );
         case MsgType.WAITING_PLAYER:
+
+            const join_link = `${import.meta.env.VITE_FE_URL}/join/${s}`
+            const watch_link = `${import.meta.env.VITE_FE_URL}/spectate/${s}`
+
             return (
                 <>
-                    <h1>Waiting for other player...</h1>
+                    <h1>Waiting for the second player...</h1>
                     { !watch &&
                         <>
-                            <h3>Send this link to other player to join</h3>
-                            <h3>{`${import.meta.env.VITE_FE_URL}/join/${s}`}</h3>
+                            <h3>Click this link to copy and send it to the other player.</h3>
+                            <a onClick={() => copyLink(join_link)} href="javascript:">
+                                <h3>{join_link}</h3>
+                            </a>
                         </>
                     }
-                    <h4>To let other watch the game, use this link</h4>
-                    <h4>{`${import.meta.env.VITE_FE_URL}/spectate/${s}`}</h4>
+                    <h4>To let others watch the game, click this link</h4>
+                    <a onClick={() => copyLink(watch_link)} href="javascript:">
+                        <h4>{watch_link}</h4>
+                    </a>
+
                 </>
             );
         case MsgType.JOIN_GAME_ERROR:
@@ -106,4 +120,4 @@ const annouceContent = (body : JSX.Element) => {
     setTimeout(() => setAnnounceDisplay(false), 3000)
 }
 
-export {InfoMsg, AvatarBox, notify, annouceGameStarted}
+export {InfoMsg, AvatarBox, notify, annouceGameStarted, copyLink}
