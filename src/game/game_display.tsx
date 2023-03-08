@@ -61,11 +61,15 @@ const InfoMsg = (i: number, s: string, watch : boolean, gid? : string) => {
                 </>
             );
         case MsgType.DISCONNECT:
+            const game_link = `${import.meta.env.VITE_FE_URL}/game/${gid}`
+
             return (
                 <>
                     <h1>{s}</h1>
                     <h3>Send this link to that player for reconnection</h3>
-                    <h3>{`${import.meta.env.VITE_FE_URL}/game/${gid}`}</h3>
+                    <a onClick={() => copyLink(game_link)} href="javascript:">
+                        <h3>{game_link}</h3>
+                    </a>
                 </>
             );
     }
