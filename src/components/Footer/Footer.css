@@ -1,0 +1,38 @@
+footer {
+    background: #080c1b;
+    padding-top: 40px;
+    color: white;
+}
+
+.abs {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.footer-content p{
+    max-width: 500px;
+    margin: 10px auto;
+    line-height: 28px;
+    font-size: 14px;
+}
+
+.info {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0 3rem 0;
+}
+
+.info li{
+    margin: 0 10px;
+}
