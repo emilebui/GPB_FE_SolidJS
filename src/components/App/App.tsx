@@ -37,6 +37,7 @@ import {EnableBtn, handleMsg, timeFlow} from "~/game/game_logic";
 import {Ban, Chat, Pick} from "~/game/game_move";
 import {Toaster} from "solid-toast";
 import AnnoucePopup from "~/components/App/AnouncePopup";
+import Footer from "~/components/Footer/Footer";
 
 
 const id2Card = (id :number, index : number, offset : number = 0) => (
@@ -298,14 +299,18 @@ const App: Component<AppProps> = (props) => {
                             )}
                         </For>
                     </div>
+                    <Footer></Footer>
                 </main>
             }
             {
                 !loading() &&
-                <LoadingMenu>
-                    {LoadingMenuContent(resMsg)}
-                    <Toaster/>
-                </LoadingMenu>
+                <>
+                    <LoadingMenu>
+                        {LoadingMenuContent(resMsg)}
+                        <Toaster/>
+                    </LoadingMenu>
+                    <Footer Absolute={true}></Footer>
+                </>
             }
         </>
     );
