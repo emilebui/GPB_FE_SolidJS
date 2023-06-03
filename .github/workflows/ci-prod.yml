@@ -38,6 +38,7 @@ jobs:
 
   Deploy:
     runs-on: self-hosted
+    needs: CI_Pipeline
     steps:
 
       - name: Deploy
