@@ -35,3 +35,15 @@ jobs:
 
       - name: Push to Docker Hub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/gbp_fe:prod
+
+  Deploy:
+    runs-on: self-hosted
+    steps:
+
+      - name: Deploy
+        working-directory: /opt/GBP_deploy_dev
+        run: |
+          docker rm -f gbp_fe
+          docker-compose pull gbp_fe
+          docker-compose up -d
+          docker system prune -f
