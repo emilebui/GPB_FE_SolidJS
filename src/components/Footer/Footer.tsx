@@ -23,6 +23,12 @@ export default function Footer(props : any) {
                     >
                         Development Blog
                     </a></li>
+                    <li><a
+                        href="https://emilebui.github.io/"
+                        target="_blank"
+                    >
+                        Contact
+                    </a></li>
                 </ul>
             </div>
         </footer>

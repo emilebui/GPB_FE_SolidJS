@@ -4,12 +4,16 @@ import "./AvatarPopup.css"
 import AvatarPopup, {AvatarImage} from "~/components/Menu/AvatarPopup";
 import {Avatars} from "~/data/avatars";
 import {avatar} from "~/data/store";
+import {GSForm} from "~/components/Menu/GameSettingPopup";
+import Popup from "~/components/Popup/Popup";
 
 export default function Menu(props: any) {
     const [nickname, setNickname] = createSignal("");
     const [avaPopUp, setAvaPopUp] = createSignal(false);
+    const [gameSettingPopup, setGameSettingPopup] = createSignal(false);
 
     const watch : boolean = props.watch || false
+    const create : boolean = props.create || false
 
     const joinGame = () => {
         const gid = props.gid;
@@ -40,6 +44,11 @@ export default function Menu(props: any) {
                         </AvatarPopup>
                     </>
                 }
+                <Popup active={gameSettingPopup()}>
+                    <button onClick={() => setGameSettingPopup(false)} class="close_btn">╳</button>
+                    <GSForm close={() => setGameSettingPopup(false)}/>
+                </Popup>
+
                 <div class="div">
                     <div class="inputBox">
                         <input
@@ -59,6 +68,15 @@ export default function Menu(props: any) {
                     }
                     <i></i></button>
                 </div>
+                {
+                    create &&
+                    <>
+                        <button class="btn" onClick={() => setGameSettingPopup(true)}>
+                            <span>Game Settings</span>
+                        </button>
+                    </>
+
+                }
             </div>
         </>
     );

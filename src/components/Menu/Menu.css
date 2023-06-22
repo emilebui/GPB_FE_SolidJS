@@ -155,3 +155,10 @@ body {
     flex-direction: column;
     gap: 10px;
 }
+
+.close_btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 20px;
+}
