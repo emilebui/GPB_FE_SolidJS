@@ -12,7 +12,7 @@ import {
     setChosenCharacter,
 } from '~/data/store';
 import {ChatInfo, GenshinElement, MsgType, ResMessage} from '~/types/types';
-import {getCID, newCID} from '~/utils/utils';
+import {getCID, getLocalStorage, newCID} from '~/utils/utils';
 import {LoadingMenu} from "~/components/App/LoadingMenu";
 import {useParams, useSearchParams} from "@solidjs/router";
 
@@ -22,7 +22,7 @@ import {
     annouceBody,
     announceDisplay,
     banlist1,
-    banlist2, chatHistory, gameEnded,
+    banlist2, chatHistory, gameEnded, gameSetting,
     loading,
     p1Info,
     p2Info,
@@ -54,21 +54,22 @@ interface AppProps {
 
 const App: Component<AppProps> = (props) => {
     const params = useParams();
-    const [sparams, _] = useSearchParams();
     const [chatExpand, setChatExpand] = createSignal(true)
     const [expandDisplay, setExpandDisplay] = createSignal(true)
 
     const gid = params.gameid
-    const nickname = sparams.nickname
+    let nickname = getLocalStorage("nickname")
     let cid = getCID()
-    const ava = sparams.ava
+    const ava = getLocalStorage("avatar")
+    const casual = getLocalStorage("gs_casual_mode")
+    const numBan = getLocalStorage("gs_num_ban")
     const watch : boolean = props.watch || false
 
     if (watch) {
         cid = newCID()
     }
 
-    let ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}`
+    let ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}&casual=${casual}&numban=${numBan}`
 
     if (watch) {
         ws_uri = `${import.meta.env.VITE_WS_URI}/watch?gid=${gid}&cid=${cid}&nickname=${nickname}`

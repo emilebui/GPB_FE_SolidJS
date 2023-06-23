@@ -6,6 +6,8 @@ import {Avatars} from "~/data/avatars";
 import {avatar} from "~/data/store";
 import {GSForm} from "~/components/Menu/GameSettingPopup";
 import Popup from "~/components/Popup/Popup";
+import {setLocalStorage} from "~/utils/utils";
+import {gameSetting} from "~/game/game_state";
 
 export default function Menu(props: any) {
     const [nickname, setNickname] = createSignal("");
@@ -21,9 +23,13 @@ export default function Menu(props: any) {
         if (nickname() === "") {
             setNickname(props.player)
         }
-        let url = `/game/${gid}?nickname=${nickname()}&ava=${avatar()}`
+        setLocalStorage("nickname", nickname())
+        setLocalStorage("avatar", avatar())
+        setLocalStorage("gs_num_ban", gameSetting.ban_number)
+        setLocalStorage("gs_casual_mode", gameSetting.casual.toString())
+        let url = `/game/${gid}`
         if (watch) {
-            url = `/watch/${gid}?nickname=${nickname()}`
+            url = `/watch/${gid}`
         }
 
         window.location.href = url

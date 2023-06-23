@@ -102,11 +102,23 @@ function GameEndUpdate(gs : any) {
 }
 
 function SelectedCardUpdate(gs :any) {
-    const new_selected_list = Object.keys(gs.bp_map).map(
-        function(item) {
-            return parseInt(item, 0)
-        }
-    );
+
+    let new_selected_list;
+
+    if (getCID() === p1Info.pid) {
+        new_selected_list = Object.keys(gs.bp_map1).map(
+            function(item) {
+                return parseInt(item, 0)
+            }
+        );
+    } else {
+        new_selected_list = Object.keys(gs.bp_map2).map(
+            function(item) {
+                return parseInt(item, 0)
+            }
+        );
+    }
+
     setSelectedCharacters(new_selected_list)
 }
 

@@ -1,8 +1,8 @@
 import './AvatarPopup.css';
 import {Avatar} from "~/types/types";
-import {createSignal, For} from "solid-js";
+import {For} from "solid-js";
 import {Avatars} from "~/data/avatars";
-import {avatar, setAvatar} from "~/data/store";
+import {setAvatar} from "~/data/store";
 
 export function AvatarImage(a : Avatar) {
     return (
