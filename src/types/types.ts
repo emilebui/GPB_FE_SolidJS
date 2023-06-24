@@ -17,6 +17,12 @@ export interface GenshinCharacter {
     collab: boolean;
 }
 
+export interface GameSetting {
+    casual: boolean;
+    ban_number: number;
+}
+
+
 export interface Avatar {
     id: number;
     name: string;

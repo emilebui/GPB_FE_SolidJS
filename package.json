@@ -17,6 +17,7 @@
   "dependencies": {
     "@solidjs/meta": "^0.28.2",
     "@solidjs/router": "0.8.2",
+    "@thisbeyond/solid-select": "^0.14.0",
     "solid-js": "^1.6.9",
     "solid-start": "^0.2.15",
     "solid-toast": "^0.4.0",
