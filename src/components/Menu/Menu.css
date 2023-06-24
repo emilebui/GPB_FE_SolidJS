@@ -162,3 +162,12 @@ body {
     right: 0;
     padding: 20px;
 }
+
+.sponsor {
+    position: absolute;
+    bottom: 0;
+    left: 28%;
+    padding: 10px;
+    font-size: small;
+    color: #ffffff;
+}

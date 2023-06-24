@@ -46,15 +46,15 @@ const GSForm: Component<GSInterface> = props => {
     return (
         <div class="gs_container">
             <h2 class="popup-title">Game Settings</h2>
-            <div>
-                <h4>Number of Ban</h4>
-                <Select
-                    class="custom"
-                    initialValue={get_ban_select(banNumber())}
-                    options={["No Ban", 1, 2, 3, 4]}
-                    onChange={e => setBanNumber(e)}
-                />
-            </div>
+            {/*<div>*/}
+            {/*    <h4>Number of Ban</h4>*/}
+            {/*    <Select*/}
+            {/*        class="custom"*/}
+            {/*        initialValue={get_ban_select(banNumber())}*/}
+            {/*        options={["No Ban", 1, 2, 3, 4]}*/}
+            {/*        onChange={e => setBanNumber(e)}*/}
+            {/*    />*/}
+            {/*</div>*/}
             <div>
                 <div class="tooltip"><h4>Casual Mode</h4>
                     <span class="tooltiptext">Players can choose the same characters rather than not being able to pick characters that were already picked by other player</span>

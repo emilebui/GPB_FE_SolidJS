@@ -53,6 +53,7 @@ export default function Menu(props: any) {
                 <Popup active={gameSettingPopup()}>
                     <button onClick={() => setGameSettingPopup(false)} class="close_btn">╳</button>
                     <GSForm close={() => setGameSettingPopup(false)}/>
+                    <p class="sponsor">Commissioned by u/ElYiolo</p>
                 </Popup>
 
                 <div class="div">
