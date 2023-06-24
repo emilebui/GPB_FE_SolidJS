@@ -1,8 +1,12 @@
 import {createStore} from "solid-js/store";
-import {ChatInfo, GenshinCharacter, Player, ResMessage, Side} from "~/types/types";
+import {ChatInfo, GameSetting, GenshinCharacter, Player, ResMessage, Side} from "~/types/types";
 import {createSignal} from "solid-js";
-import {timeFlow} from "~/game/game_logic";
 import {MaxTimer} from "~/utils/const";
+
+const DEFAULT_GAME_SETTING: GameSetting = {
+    casual: false,
+    ban_number: 4,
+}
 
 const EmptyMsg = {type: -1, data: "", message: "", info: null}
 const EmptyPlayer = {pid: "", nickname: "", avatar: 1}
@@ -29,6 +33,8 @@ const [chatHistory, setChatHistory] = createStore<ChatInfo[]>([])
 
 const [announceDisplay, setAnnounceDisplay] = createSignal(false)
 const [annouceBody, setAnnounceBody] = createSignal((<></>))
+
+const [gameSetting, setGameSetting] = createStore<GameSetting>(DEFAULT_GAME_SETTING)
 
 export {
     resMsg,
@@ -63,4 +69,6 @@ export {
     annouceBody,
     setAnnounceBody,
     setAnnounceDisplay,
+    gameSetting,
+    setGameSetting
 }

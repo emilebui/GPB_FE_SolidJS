@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <main>
       <Title>Create Genshin Ban Pick Game</Title>
-      <Menu player="Player1" gid={new_gid}>
+      <Menu player="Player1" gid={new_gid} create={true}>
           <h1 style="font-family:HYWenHei;">Welcome to Genshin Ban Pick</h1>
       </Menu>
       <Footer Absolute={true}></Footer>
