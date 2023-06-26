@@ -13,7 +13,8 @@ import {
     setP1Info,
     setp2Info, setPick, setPickList1, setPickList2,
     setPlayerTurn,
-    setResMsg, setSelectedCharacters, setTimer, timer
+    setResMsg, setSelectedCharacters, setTimer, timer,
+    setGameSetting, banlist1, gameSetting
 } from "~/game/game_state";
 import {chosenCharacter, setTargetCard} from "~/data/store";
 import {TargetCard2TurnMap} from "~/data/turn_info";
@@ -66,6 +67,9 @@ function GameStateUpdate(res : ResMessage) {
     let game_state = JSON.parse(res.data)
     console.log(game_state)
 
+    // Update Game Setting
+    GameSettingUpdate(game_state)
+
     // Update Player Info
     PlayerUpdate(game_state)
 
@@ -92,6 +96,16 @@ function GameStateUpdate(res : ResMessage) {
         setTimer(MaxTimer + 60)
     } else {
         setTimer(MaxTimer)
+    }
+}
+
+function GameSettingUpdate(gs: any) {
+    const num_ban = parseInt(gs.settings.num_ban)
+    setGameSetting("ban_number", num_ban)
+
+    if (banlist1.length != num_ban) {
+        setBanList1(Array.from({length: num_ban}))
+        setBanList2(Array.from({length: num_ban}))
     }
 }
 
@@ -134,13 +148,13 @@ const BoardUpdate = (gs : any) => {
     // Update p1_ban
     const p1_ban = gs.board.p_1_ban
     if (p1_ban) {
-        setBanList1(createTeamArray(p1_ban, 4))
+        setBanList1(createTeamArray(p1_ban, gameSetting.ban_number))
     }
 
     // Update p2_ban
     const p2_ban = gs.board.p_2_ban
     if (p2_ban) {
-        setBanList2(createTeamArray(p2_ban, 4))
+        setBanList2(createTeamArray(p2_ban, gameSetting.ban_number))
     }
 
     // Update p1_pick
