@@ -138,8 +138,9 @@ function SelectedCardUpdate(gs :any) {
 
 const TargetUpdate = (gs : any) => {
     const turn = gs.turn
+    const format = gs.settings.num_ban
     // @ts-ignore
-    const targetPos = TargetCard2TurnMap[turn]
+    const targetPos = TargetCard2TurnMap[format][turn]
     setTargetCard(targetPos)
 }
 
@@ -214,7 +215,7 @@ function EnableBtn(b : boolean) {
 }
 
 const checkNewGame = (gs : any) => {
-    if (gs.board.p_1_ban === null) {
+    if (gs.turn === 1) {
         return true
     } else {
         console.log(gs.board.p_1_ban)
