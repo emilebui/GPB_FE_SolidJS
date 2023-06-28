@@ -24,8 +24,8 @@ const [p1Info, setP1Info] = createStore<Player>({...EmptyPlayer, side: Side.LEFT
 const [p2Info, setp2Info] = createStore<Player>({...EmptyPlayer, side: Side.RIGHT})
 
 const  [selectedCharacters, setSelectedCharacters] = createStore<GenshinCharacter['id'][]>([])
-const [banlist1, setBanList1] = createStore<GenshinCharacter['id'][]>(Array.from({length: 4}))
-const [banlist2, setBanList2] = createStore<GenshinCharacter['id'][]>(Array.from({length: 4}))
+const [banlist1, setBanList1] = createStore<GenshinCharacter['id'][]>(Array.from({length: 1}))
+const [banlist2, setBanList2] = createStore<GenshinCharacter['id'][]>(Array.from({length: 1}))
 const [picklist1, setPickList1] = createStore<GenshinCharacter['id'][]>(Array.from({length: 8}))
 const [picklist2, setPickList2] = createStore<GenshinCharacter['id'][]>(Array.from({length: 8}))
 

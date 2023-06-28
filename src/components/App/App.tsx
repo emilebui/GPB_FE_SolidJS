@@ -70,7 +70,7 @@ const App: Component<AppProps> = (props) => {
     }
 
     let ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}&casual=${casual}&numban=${numBan}`
-
+    console.log(ws_uri)
     if (watch) {
         ws_uri = `${import.meta.env.VITE_WS_URI}/watch?gid=${gid}&cid=${cid}&nickname=${nickname}`
     }
@@ -220,18 +220,38 @@ const App: Component<AppProps> = (props) => {
                             }
                         </button>
                     </div>
-                    <h3 class={styles.title}>Ban List</h3>
-                    <div class={styles.teams}>
-                        <div class={`${styles.grid} ${styles.team}`}>
-                            <For each={banlist1}>{(id, i) => id2Card(id, i())}</For>
-                        </div>
-                        <div class={`${styles.timer2} ${styles.chat_hidden}`}>
-                            <p>Time Remaining</p>
-                        </div>
-                        <div class={`${styles.grid} ${styles.team}`}>
-                            <For each={banlist2}>{(id, i) => id2Card(id, i(), 4)}</For>
-                        </div>
-                    </div>
+                    {
+                        gameSetting.ban_number != 0 &&
+                        <>
+                            <h3 class={styles.title}>Ban List</h3>
+                            <div class={styles.teams}>
+                                <div class={`${styles.grid}`}
+                                     classList={{
+                                         [styles.team]: gameSetting.ban_number == 4,
+                                         [styles.team3]: gameSetting.ban_number == 3,
+                                         [styles.team2]: gameSetting.ban_number == 2,
+                                         [styles.team1]: gameSetting.ban_number == 1
+                                     }}
+                                >
+                                    <For each={banlist1}>{(id, i) => id2Card(id, i())}</For>
+                                </div>
+                                <div class={`${styles.timer2} ${styles.chat_hidden}`}>
+                                    <p>Time Remaining</p>
+                                </div>
+                                <div class={`${styles.grid}`}
+                                     classList={{
+                                         [styles.team]: gameSetting.ban_number == 4,
+                                         [styles.team3]: gameSetting.ban_number == 3,
+                                         [styles.team2]: gameSetting.ban_number == 2,
+                                         [styles.team1]: gameSetting.ban_number == 1
+                                     }}
+                                >
+                                    <For each={banlist2}>{(id, i) => id2Card(id, i(), 4)}</For>
+                                </div>
+                            </div>
+                        </>
+                    }
+
                     <h3 class={styles.title}>Pick List</h3>
                     <div class={styles.teams}>
                         <div class={`${styles.grid} ${styles.team}`}>
