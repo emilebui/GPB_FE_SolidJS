@@ -14,26 +14,26 @@ import {
     setp2Info, setPick, setPickList1, setPickList2,
     setPlayerTurn,
     setResMsg, setSelectedCharacters, setTimer, timer,
-    setGameSetting, banlist1, gameSetting
+    setGameSetting, banlist1, gameSetting, delayTimer, setDelayTimer
 } from "~/game/game_state";
 import {chosenCharacter, setTargetCard} from "~/data/store";
 import {TargetCard2TurnMap} from "~/data/turn_info";
 import {get_random, getCID, playSound} from "~/utils/utils";
-import {annouceGameStarted, notify} from "~/game/game_display";
+import {annouceGameStarted, annoucePlayerTurn, notify} from "~/game/game_display";
 import {characters} from "~/data/characters";
 import {Ban, Pick} from "~/game/game_move";
 import {MaxTimer} from "~/utils/const";
 
-const handleMsg = (data : string) => {
+const handleMsg = (data: string) => {
 
     // handle response message object
     const msg_obj = parseResMsg(data)
     processMsg(msg_obj)
-    console.log(msg_obj)
+    // console.log(msg_obj)
 }
 
 
-const processMsg = (data : ResMessage) => {
+const processMsg = (data: ResMessage) => {
 
     if (data.type >= MsgType.WAITING_PLAYER) {
         if (!gameEnded()) {
@@ -58,14 +58,14 @@ const processMsg = (data : ResMessage) => {
 
 }
 
-function UpdateChatLog(res : ResMessage) {
-    let chat_info : ChatInfo = JSON.parse(res.data)
+function UpdateChatLog(res: ResMessage) {
+    let chat_info: ChatInfo = JSON.parse(res.data)
     setChatHistory([...chatHistory, chat_info])
 }
 
-function GameStateUpdate(res : ResMessage) {
+function GameStateUpdate(res: ResMessage) {
     let game_state = JSON.parse(res.data)
-    console.log(game_state)
+    // console.log(game_state)
 
     // Update Game Setting
     GameSettingUpdate(game_state)
@@ -92,10 +92,27 @@ function GameStateUpdate(res : ResMessage) {
     GameEndUpdate(game_state)
 
     // Update Timer
-    if (checkNewGame(game_state)) {
-        setTimer(MaxTimer + 60)
-    } else {
-        setTimer(MaxTimer)
+    setGameTimer(game_state)
+}
+
+function setGameTimer(gs: any) {
+    const game_delay = gs.settings.delay
+    let new_game_check = checkNewGame(gs)
+
+    if (!gs.settings.casual) {
+        if (new_game_check) {
+            setTimer(MaxTimer + 60)
+        } else {
+            if (game_delay > 0) {
+                let delta_delay = game_delay * 20
+                setDelayTimer(delta_delay)
+                setTimer(MaxTimer + delta_delay)
+            } else {
+                setTimer(MaxTimer)
+            }
+        }
+    } else if (!new_game_check && game_delay > 0) {
+        setDelayTimer(game_delay * 20)
     }
 }
 
@@ -109,25 +126,25 @@ function GameSettingUpdate(gs: any) {
     }
 }
 
-function GameEndUpdate(gs : any) {
+function GameEndUpdate(gs: any) {
     if (gs.status === GameStatus.ENDED) {
         setGameEnded(true)
     }
 }
 
-function SelectedCardUpdate(gs :any) {
+function SelectedCardUpdate(gs: any) {
 
     let new_selected_list;
 
     if (getCID() === p1Info.pid) {
         new_selected_list = Object.keys(gs.bp_map1).map(
-            function(item) {
+            function (item) {
                 return parseInt(item, 0)
             }
         );
     } else {
         new_selected_list = Object.keys(gs.bp_map2).map(
-            function(item) {
+            function (item) {
                 return parseInt(item, 0)
             }
         );
@@ -136,7 +153,7 @@ function SelectedCardUpdate(gs :any) {
     setSelectedCharacters(new_selected_list)
 }
 
-const TargetUpdate = (gs : any) => {
+const TargetUpdate = (gs: any) => {
     const turn = gs.turn
     const format = gs.settings.num_ban
     // @ts-ignore
@@ -144,7 +161,7 @@ const TargetUpdate = (gs : any) => {
     setTargetCard(targetPos)
 }
 
-const BoardUpdate = (gs : any) => {
+const BoardUpdate = (gs: any) => {
 
     // Update p1_ban
     const p1_ban = gs.board.p_1_ban
@@ -171,8 +188,8 @@ const BoardUpdate = (gs : any) => {
     }
 }
 
-function createTeamArray(arr : number[], length : number) {
-    const new_arr : number[] = Array.from({length: length})
+function createTeamArray(arr: number[], length: number) {
+    const new_arr: number[] = Array.from({length: length})
 
     for (let i = 0; i < arr.length; i++) {
         new_arr[i] = arr[i]
@@ -182,7 +199,7 @@ function createTeamArray(arr : number[], length : number) {
 }
 
 
-const PlayerUpdate = (gs : any) => {
+const PlayerUpdate = (gs: any) => {
 
     // Update player 1
     if (p1Info.pid === "") {
@@ -201,7 +218,11 @@ const PlayerUpdate = (gs : any) => {
     setPlayerTurn(gs.player_turn)
 }
 
-function EnableBtn(b : boolean) {
+function EnableBtn(b: boolean) {
+
+    if (delayTimer() > 0) {
+        return false
+    }
 
     if (getCID() !== playerTurn()) {
         return false
@@ -214,24 +235,18 @@ function EnableBtn(b : boolean) {
     return pick() === b;
 }
 
-const checkNewGame = (gs : any) => {
-    if (gs.turn === 1) {
-        return true
-    } else {
-        console.log(gs.board.p_1_ban)
-        return false
-    }
+const checkNewGame = (gs: any) => {
+    return gs.turn === 1;
 }
 
 
-
-const UpdateGame = (player : string, gs : any) => {
+const UpdateGame = (player: string, gs: any) => {
     if (checkNewGame(gs)) {
         setTimeout(() => annouceGameStarted(player), 100)
     }
 }
 
-const GameNotification = (gs : any) => {
+const GameNotification = (gs: any) => {
     if (loading() && !gameEnded()) {
 
         if (gs.status === GameStatus.ENDED) {
@@ -249,6 +264,13 @@ const GameNotification = (gs : any) => {
                 notify("Your turn to ban!")
                 playSound("/sound/you_ban.mp3")
             }
+
+            // Update popup if delay
+            let game_delay = gs.settings.delay
+            if (!checkNewGame(gs) && game_delay > 0) {
+                annoucePlayerTurn(gs.pick, game_delay * 1000)
+            }
+
         } else {
             let nickname = p2Info.nickname
             if (gs.player_turn === p1Info.pid) {
@@ -266,7 +288,7 @@ const GameNotification = (gs : any) => {
     }
 }
 
-const RandomMove = (client : any) => {
+const RandomMove = (client: any) => {
     if (loading() && !gameEnded() && playerTurn() == getCID()) {
         const unpicked_cards = characters.filter(card => !selectedCharacters.includes(card.id))
         const random_card = get_random(unpicked_cards)
@@ -278,12 +300,20 @@ const RandomMove = (client : any) => {
     }
 }
 
-const timeFlow = (client : any) => {
-    if (loading() && !gameEnded() && timer() > 0) {
-        setTimer(timer() - 1)
 
-        if (timer() === 0) {
-            RandomMove(client)
+const timeFlow = (client: any) => {
+    if (loading() && !gameEnded()) {
+
+        if (delayTimer() > 0) {
+            setDelayTimer(delayTimer() - 1)
+        }
+
+        if (timer() > 0) {
+            setTimer(timer() - 1)
+
+            if (timer() === 0) {
+                RandomMove(client)
+            }
         }
     }
 }

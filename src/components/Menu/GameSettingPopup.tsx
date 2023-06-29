@@ -12,6 +12,7 @@ const GSForm: Component<GSInterface> = props => {
 
     const [banNumber, setBanNumber] = createSignal(0)
     const [casual, setCasual] = createSignal(true)
+    const [delay, setDelay] = createSignal("0")
 
     createEffect(
         () => {
@@ -23,8 +24,10 @@ const GSForm: Component<GSInterface> = props => {
     const update_setting = () => {
         let temp_bn = banNumber()
         let temp_c = casual()
+        let temp_d = delay()
         setGameSetting("casual", temp_c)
         setGameSetting("ban_number", temp_bn)
+        setGameSetting("delay", temp_d)
         props.close()
     }
 
@@ -43,7 +46,7 @@ const GSForm: Component<GSInterface> = props => {
             </div>
             <div>
                 <div class="tooltip"><h4>Casual Mode</h4>
-                    <span class="tooltiptext">Players can choose the same characters rather than not being able to pick characters that were already picked by other player</span>
+                    <span class="tooltiptext">Players can pick the same character whom was previously picked by the other player. Also, in this mode, there is no ban pick timer</span>
                 </div>
                 <label class="switch">
                     <input type="checkbox" checked={casual()}
@@ -51,6 +54,18 @@ const GSForm: Component<GSInterface> = props => {
                     <span class="slider round"></span>
                 </label>
             </div>
+            <div>
+                <div class="tooltip"><h4>Delay</h4>
+                    <span class="tooltiptext">After banning/picking character, the player will have a small delay to display a popup which indicate if their turn is up</span>
+                </div>
+                <Select
+                    class="custom"
+                    initialValue={delay()}
+                    options={["0", "3", "5", "8", "10"]}
+                    onChange={e => setDelay(e)}
+                />
+            </div>
+
             <br/>
 
             <div>
