@@ -20,6 +20,8 @@ export interface GenshinCharacter {
 export interface GameSetting {
     casual: boolean;
     ban_number: number;
+
+    delay: string;
 }
 
 

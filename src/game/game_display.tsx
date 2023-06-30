@@ -113,15 +113,30 @@ const annouceGameStarted = ( player : string ) => {
     annouceContent(
         <>
             <h1>Game Started</h1>
-            <h3>{`${player} will go first!!`}</h3>
+            <h2>{`${player} will go first!!`}</h2>
         </>
     )
 }
 
-const annouceContent = (body : JSX.Element) => {
-    setAnnounceBody(body)
-    setAnnounceDisplay(true)
-    setTimeout(() => setAnnounceDisplay(false), 3000)
+const annoucePlayerTurn = (pick: boolean, delay: number) => {
+    annouceContent(
+        <>
+            {
+                pick &&
+                <h1>Your turn to pick</h1>
+            }
+            {
+                !pick &&
+                <h1>Your turn to ban</h1>
+            }
+        </>, delay
+    )
 }
 
-export {InfoMsg, AvatarBox, notify, annouceGameStarted, copyLink}
+const annouceContent = (body : JSX.Element, timer: number = 3000) => {
+    setAnnounceBody(body)
+    setAnnounceDisplay(true)
+    setTimeout(() => setAnnounceDisplay(false), timer)
+}
+
+export {InfoMsg, AvatarBox, notify, annouceGameStarted, copyLink, annoucePlayerTurn}

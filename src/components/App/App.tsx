@@ -14,7 +14,7 @@ import {
 import {ChatInfo, GenshinElement, MsgType, ResMessage} from '~/types/types';
 import {getCID, getLocalStorage, newCID} from '~/utils/utils';
 import {LoadingMenu} from "~/components/App/LoadingMenu";
-import {useParams, useSearchParams} from "@solidjs/router";
+import {useParams} from "@solidjs/router";
 
 // @ts-ignore
 import {w3cwebsocket as WebSocket} from "websocket";
@@ -22,7 +22,7 @@ import {
     annouceBody,
     announceDisplay,
     banlist1,
-    banlist2, chatHistory, gameEnded, gameSetting,
+    banlist2, chatHistory, delayTimer, gameEnded, gameSetting,
     loading,
     p1Info,
     p2Info,
@@ -40,7 +40,7 @@ import AnnoucePopup from "~/components/App/AnouncePopup";
 import Footer from "~/components/Footer/Footer";
 
 
-const id2Card = (id :number, index : number, offset : number = 0) => (
+const id2Card = (id: number, index: number, offset: number = 0) => (
     <Card
         index={index + offset}
         character={characters.find(c => c.id === id)}
@@ -49,7 +49,7 @@ const id2Card = (id :number, index : number, offset : number = 0) => (
 
 
 interface AppProps {
-    watch? : boolean;
+    watch?: boolean;
 }
 
 const App: Component<AppProps> = (props) => {
@@ -63,14 +63,14 @@ const App: Component<AppProps> = (props) => {
     const ava = getLocalStorage("avatar")
     const casual = getLocalStorage("gs_casual_mode")
     const numBan = getLocalStorage("gs_num_ban")
-    const watch : boolean = props.watch || false
+    const delay = getLocalStorage("gs_delay")
+    const watch: boolean = props.watch || false
 
     if (watch) {
         cid = newCID()
     }
 
-    let ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}&casual=${casual}&numban=${numBan}`
-    console.log(ws_uri)
+    let ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}&casual=${casual}&numban=${numBan}&delay=${delay}`
     if (watch) {
         ws_uri = `${import.meta.env.VITE_WS_URI}/watch?gid=${gid}&cid=${cid}&nickname=${nickname}`
     }
@@ -79,7 +79,7 @@ const App: Component<AppProps> = (props) => {
     const client = new WebSocket(ws_uri)
 
 
-    const LoadingMenuContent = (resMsg : ResMessage) => {
+    const LoadingMenuContent = (resMsg: ResMessage) => {
         let msg = resMsg.message;
         if (resMsg.type === MsgType.WAITING_PLAYER) {
             msg = gid
@@ -90,7 +90,7 @@ const App: Component<AppProps> = (props) => {
         return InfoMsg(resMsg.type, msg, watch)
     }
 
-    setInterval( () => {
+    setInterval(() => {
         timeFlow(client)
     }, 50);
 
@@ -121,8 +121,7 @@ const App: Component<AppProps> = (props) => {
     })
 
 
-
-    const chat = (e : any) => {
+    const chat = (e: any) => {
         if (e.keyCode == 13 && e.shiftKey == false) {
             const msg = e.currentTarget.value.trim();
             Chat(client, msg)
@@ -140,9 +139,9 @@ const App: Component<AppProps> = (props) => {
         }
     }
 
-    const chatRender = (info : ChatInfo) => (
+    const chatRender = (info: ChatInfo) => (
         <div>
-            { !info.join_chat &&
+            {!info.join_chat &&
                 <>
                 <span classList={{
                     [styles.span_p1]: info.cid === p1Info.pid,
@@ -150,11 +149,11 @@ const App: Component<AppProps> = (props) => {
                     [styles.span_you]: cid === info.cid,
                 }}
                 >{info.nickname}</span>
-                {
-                cid === info.cid &&
-                <span> (You)</span>
-                }
-                <span>: {info.message}</span>
+                    {
+                        cid === info.cid &&
+                        <span> (You)</span>
+                    }
+                    <span>: {info.message}</span>
                 </>
             }
             {
@@ -172,7 +171,7 @@ const App: Component<AppProps> = (props) => {
 
     return (
         <>
-            {   loading() &&
+            {loading() &&
                 <main>
                     {
                         gameEnded() &&
@@ -191,16 +190,17 @@ const App: Component<AppProps> = (props) => {
                              }}
                         >
                             <div class={styles.chat_display}
-                                classList={{
-                                    [styles.expanded]: expandDisplay()
-                                }}
+                                 classList={{
+                                     [styles.expanded]: expandDisplay()
+                                 }}
                             >
                                 <div class={styles.chat_div}
-                                    classList={{
-                                        [styles.chat_hidden]: !expandDisplay()
-                                    }}>
+                                     classList={{
+                                         [styles.chat_hidden]: !expandDisplay()
+                                     }}>
                                     <div>
-                                        <span>Click </span><a onClick={() => copyWatchLink()} href="javascript:">here</a><span> to let other watch the game</span>
+                                        <span>Click </span><a onClick={() => copyWatchLink()}
+                                                              href="javascript:">here</a><span> to let other watch the game</span>
                                     </div>
                                     <For each={chatHistory}>{info => chatRender(info)}</For>
                                 </div>
@@ -212,10 +212,10 @@ const App: Component<AppProps> = (props) => {
                                     [styles.expanded]: chatExpand()
                                 }}
                                 onClick={() => expandChat()}>
-                            { !expandDisplay() &&
+                            {!expandDisplay() &&
                                 <span>»</span>
                             }
-                            { expandDisplay() &&
+                            {expandDisplay() &&
                                 <span>«</span>
                             }
                         </button>
@@ -258,9 +258,9 @@ const App: Component<AppProps> = (props) => {
                             <For each={picklist1}>{(id, i) => id2Card(id, i(), 8)}</For>
                         </div>
                         <div class={styles.timer2}
-                            classList={{
-                                [styles.chat_hidden]: !(timer() > 0 && !gameEnded())
-                            }}
+                             classList={{
+                                 [styles.chat_hidden]: !(timer() > 0 && !gameEnded() && delayTimer() <= 0)
+                             }}
                         >
                             <p>Time Remaining</p>
                             <h1>{Math.floor(timer() / 20) + 1}s</h1>
