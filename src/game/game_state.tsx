@@ -6,6 +6,7 @@ import {MaxTimer} from "~/utils/const";
 const DEFAULT_GAME_SETTING: GameSetting = {
     casual: false,
     ban_number: 4,
+    delay: "0",
 }
 
 const EmptyMsg = {type: -1, data: "", message: "", info: null}
@@ -15,7 +16,9 @@ const [resMsg, setResMsg] = createStore<ResMessage>(EmptyMsg)
 const [playerTurn, setPlayerTurn] = createSignal("")
 const [loading, setLoading] = createSignal(false)
 
-const [timer, setTimer] = createSignal(MaxTimer)
+const [timer, setTimer] = createSignal(0)
+
+const [delayTimer, setDelayTimer] = createSignal(0)
 const [pick, setPick] = createSignal(false)
 
 const [gameEnded, setGameEnded] = createSignal(false)
@@ -70,5 +73,7 @@ export {
     setAnnounceBody,
     setAnnounceDisplay,
     gameSetting,
-    setGameSetting
+    setGameSetting,
+    delayTimer,
+    setDelayTimer
 }

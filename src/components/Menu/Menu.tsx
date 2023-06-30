@@ -27,6 +27,7 @@ export default function Menu(props: any) {
         setLocalStorage("avatar", avatar())
         setLocalStorage("gs_num_ban", gameSetting.ban_number)
         setLocalStorage("gs_casual_mode", gameSetting.casual.toString())
+        setLocalStorage("gs_delay", gameSetting.delay)
         let url = `/game/${gid}`
         if (watch) {
             url = `/watch/${gid}`
