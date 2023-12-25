@@ -398,6 +398,15 @@ export const characters: GenshinCharacter[] = [
     collab: false,
   },
   {
+    id: 76,
+    fullName: 'Navia',
+    shortName: 'Navia',
+    stars: 5,
+    elements: ['geo'],
+    selected: false,
+    collab: false,
+  },
+  {
     id: 72,
     fullName: 'Neuvillette',
     shortName: 'Neuvillette',
