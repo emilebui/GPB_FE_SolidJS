@@ -101,6 +101,15 @@ export const characters: GenshinCharacter[] = [
     collab: false,
   },
   {
+    id: 77,
+    fullName: 'Chevreuse',
+    shortName: 'Chevreuse',
+    stars: 4,
+    elements: ['pyro'],
+    selected: false,
+    collab: false,
+  },
+  {
     id: 8,
     fullName: 'Chongyun',
     shortName: 'Chongyun',
