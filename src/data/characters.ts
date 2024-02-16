@@ -218,6 +218,15 @@ export const characters: GenshinCharacter[] = [
     collab: false,
   },
   {
+    id: 78,
+    fullName: 'Gaming',
+    shortName: 'Gaming',
+    stars: 4,
+    elements: ['pyro'],
+    selected: false,
+    collab: false,
+  },
+  {
     id: 13,
     fullName: 'Ganyu',
     shortName: 'Ganyu',
@@ -602,6 +611,15 @@ export const characters: GenshinCharacter[] = [
     stars: 4,
     elements: ['pyro'],
     selected: true,
+    collab: false,
+  },
+  {
+    id: 79,
+    fullName: 'Xianyun',
+    shortName: 'Xianyun',
+    stars: 5,
+    elements: ['anemo'],
+    selected: false,
     collab: false,
   },
   {
