@@ -47,6 +47,15 @@ export const characters: GenshinCharacter[] = [
     collab: false,
   },
   {
+    id: 81,
+    fullName: 'Arlecchino',
+    shortName: 'Arlecchino',
+    stars: 5,
+    elements: ['pyro'],
+    selected: false,
+    collab: false,
+  },
+  {
     id: 66,
     fullName: 'Baizhu',
     shortName: 'Baizhu',
