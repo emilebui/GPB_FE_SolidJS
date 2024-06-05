@@ -9,9 +9,11 @@ import {
     chosenCharacter,
     filterElements,
     filterRarity,
+    filterWeapons,
+    filterGender,
     setChosenCharacter,
 } from '~/data/store';
-import {ChatInfo, GenshinElement, MsgType, ResMessage} from '~/types/types';
+import {ChatInfo, Gender, GenshinElement, MsgType, ResMessage} from '~/types/types';
 import {getCID, getLocalStorage, newCID} from '~/utils/utils';
 import {LoadingMenu} from "~/components/App/LoadingMenu";
 import {useParams} from "@solidjs/router";
@@ -306,7 +308,13 @@ const App: Component<AppProps> = (props) => {
                                             character.elements.includes(elem as GenshinElement),
                                         )) &&
                                     (filterRarity.length === 0 ||
-                                        filterRarity.includes(character.stars)),
+                                        filterRarity.includes(character.stars)) &&
+                                    (filterWeapons.length === 0 ||
+                                        filterWeapons.some(w =>
+                                            character.weapon.includes(w),
+                                        )) &&
+                                    (filterGender.length === 0 ||
+                                        filterGender.some(g => character.gender.includes(g as Gender)))
                             )}
                         >
                             {character => (
