@@ -5,6 +5,10 @@ const [filterElements, setFilterElements] = createStore<string[]>([]);
 
 const [filterRarity, setFilterRarity] = createStore<number[]>([]);
 
+const [filterWeapons, setFilterWeapons] = createStore<string[]>([]);
+
+const [filterGender, setFilterGender] = createStore<string[]>([]);
+
 const [chosenCharacter, setChosenCharacter] = createSignal(0)
 
 const [targetCard, setTargetCard] = createSignal(0)
@@ -17,6 +21,10 @@ export {
     setFilterElements,
     filterRarity,
     setFilterRarity,
+    filterWeapons,
+    setFilterWeapons,
+    filterGender,
+    setFilterGender,
     chosenCharacter,
     setChosenCharacter,
     targetCard,

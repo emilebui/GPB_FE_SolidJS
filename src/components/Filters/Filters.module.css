@@ -7,6 +7,8 @@
 }
 
 .filterElements,
+.filterWeapons,
+.filterGender,
 .filterRarity {
   display: flex;
   gap: 4px;
@@ -26,7 +28,9 @@
   border-radius: var(--size-border-radius);
   cursor: pointer;
   opacity: 0.5;
-  transition: opacity 0.3s, background-color 0.3s;
+  transition:
+          opacity 0.3s,
+          background-color 0.3s;
 }
 
 .label.anemo {
@@ -55,6 +59,34 @@
 
 .label.pyro {
   background-image: url(/img/elements/pyro.svg);
+}
+
+.label.bow {
+  background-image: url(/img/icons/weapons/bow.png);
+}
+
+.label.catalyst {
+  background-image: url(/img/icons/weapons/catalyst.png);
+}
+
+.label.claymore {
+  background-image: url(/img/icons/weapons/claymore.png);
+}
+
+.label.polearm {
+  background-image: url(/img/icons/weapons/polearm.png);
+}
+
+.label.sword {
+  background-image: url(/img/icons/weapons/sword.png);
+}
+
+.label.genderM {
+  background-image: url(/img/icons/genders/male.svg);
+}
+
+.label.genderF {
+  background-image: url(/img/icons/genders/female.svg);
 }
 
 .label.stars4 {
