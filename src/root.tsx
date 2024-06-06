@@ -22,7 +22,7 @@ export default function Root() {
                 <Meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
                 <script async
-                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3178427801635466"
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3990919966665724"
                         crossOrigin="anonymous"></script>
             </Head>
             <Body>
