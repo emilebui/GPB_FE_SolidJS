@@ -21,6 +21,9 @@ export default function Root() {
                 <Meta charset="utf-8"/>
                 <Meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
+                <script async
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3178427801635466"
+                        crossOrigin="anonymous"></script>
             </Head>
             <Body>
                 <noscript>You need to enable JavaScript to run this app.</noscript>
