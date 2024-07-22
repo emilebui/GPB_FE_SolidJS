@@ -36,7 +36,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/gbp_fe:${{ github.ref }}
+            ${{ secrets.DOCKER_USERNAME }}/gbp_fe:${{ github.ref_name }}
             ${{ secrets.DOCKER_USERNAME }}/gbp_fe:prod
 
   Deploy:
