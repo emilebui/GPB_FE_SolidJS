@@ -56,7 +56,7 @@
   border-top-right-radius: var(--size-border-radius);
   border-bottom-right-radius: 20px;
   background-image: url(/img/icons/card-bg.svg),
-    linear-gradient(to bottom, var(--color-card-start), var(--color-card-end));
+  linear-gradient(to bottom, var(--color-card-start), var(--color-card-end));
 }
 
 .emptyImage {
@@ -91,6 +91,10 @@
 }
 
 .no_click {pointer-events: none;}
+
+.element:nth-child(n + 2) {
+  margin-left: -0.25rem;
+}
 
 .element[src*='anemo'] {
   --color-element: var(--color-anemo);
