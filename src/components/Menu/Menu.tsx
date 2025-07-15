@@ -28,6 +28,7 @@ export default function Menu(props: any) {
         setLocalStorage("gs_num_ban", gameSetting.ban_number)
         setLocalStorage("gs_casual_mode", gameSetting.casual.toString())
         setLocalStorage("gs_delay", gameSetting.delay)
+        setLocalStorage("gs_so_mode", gameSetting.so_mode.toString())
         let url = `/game/${gid}`
         if (watch) {
             url = `/watch/${gid}`
@@ -82,8 +83,11 @@ export default function Menu(props: any) {
                         <button class="btn" onClick={() => setGameSettingPopup(true)}>
                             <span>Game Settings</span>
                         </button>
-                    </>
 
+                        <div>
+                            <h3 style="font-family:HYWenHei;">Stygian Onslaught Mode available! Please check the game setting to apply it!</h3>
+                        </div>
+                    </>
                 }
             </div>
         </>

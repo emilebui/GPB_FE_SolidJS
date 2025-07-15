@@ -12,12 +12,14 @@ const GSForm: Component<GSInterface> = props => {
 
     const [banNumber, setBanNumber] = createSignal(0)
     const [casual, setCasual] = createSignal(true)
+    const [soMode, setSoMode] = createSignal(false)
     const [delay, setDelay] = createSignal("0")
 
     createEffect(
         () => {
             setBanNumber(gameSetting.ban_number)
             setCasual(gameSetting.casual)
+            setSoMode(gameSetting.so_mode)
         }
     )
 
@@ -25,9 +27,11 @@ const GSForm: Component<GSInterface> = props => {
         let temp_bn = banNumber()
         let temp_c = casual()
         let temp_d = delay()
+        let temp_so = soMode()
         setGameSetting("casual", temp_c)
         setGameSetting("ban_number", temp_bn)
         setGameSetting("delay", temp_d)
+        setGameSetting("so_mode", temp_so)
         props.close()
     }
 
@@ -43,6 +47,16 @@ const GSForm: Component<GSInterface> = props => {
                     options={["0", 1, 2, 3, 4]}
                     onChange={e => setBanNumber(e)}
                 />
+            </div>
+            <div>
+                <div class="tooltip"><h4>Stygian Onslaught Mode</h4>
+                    <span class="tooltiptext">This is for Stygian Onslaught Mode instead of Spiral Abyss</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked={soMode()}
+                           onChange={e => setSoMode(e.currentTarget.checked)}/>
+                    <span class="slider round"></span>
+                </label>
             </div>
             <div>
                 <div class="tooltip"><h4>Casual Mode</h4>

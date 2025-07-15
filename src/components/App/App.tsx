@@ -24,14 +24,14 @@ import {
     annouceBody,
     announceDisplay,
     banlist1,
-    banlist2, chatHistory, delayTimer, gameEnded, gameSetting,
+    banlist2, chatHistory, delayTimer, gameEnded, gameSetting, maxCharPerTeam,
     loading,
     p1Info,
     p2Info,
     picklist1,
     picklist2,
     playerTurn,
-    resMsg, setLoading,
+    resMsg, setLoading, setPickList1, setPickList2, setMaxCharPerTeam,
     setResMsg, timer
 } from "~/game/game_state";
 import {AvatarBox, copyLink, InfoMsg} from "~/game/game_display";
@@ -66,19 +66,29 @@ const App: Component<AppProps> = (props) => {
     const casual = getLocalStorage("gs_casual_mode")
     const numBan = getLocalStorage("gs_num_ban")
     const delay = getLocalStorage("gs_delay")
+    const soMode = getLocalStorage("gs_so_mode")
     const watch: boolean = props.watch || false
 
     if (watch) {
         cid = newCID()
     }
 
-    let ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}&casual=${casual}&numban=${numBan}&delay=${delay}`
+    let ws_uri = `${import.meta.env.VITE_WS_URI}/play?gid=${gid}&cid=${cid}&nickname=${nickname}&avatar=${ava}&casual=${casual}&numban=${numBan}&delay=${delay}&so=${soMode}`
     if (watch) {
         ws_uri = `${import.meta.env.VITE_WS_URI}/watch?gid=${gid}&cid=${cid}&nickname=${nickname}`
     }
 
 
     const client = new WebSocket(ws_uri)
+
+
+    console.log(soMode)
+
+    if (soMode == "true") {
+        setMaxCharPerTeam(12)
+        setPickList1(Array.from({length: maxCharPerTeam()}))
+        setPickList2(Array.from({length: maxCharPerTeam()}))
+    }
 
 
     const LoadingMenuContent = (resMsg: ResMessage) => {
@@ -268,7 +278,7 @@ const App: Component<AppProps> = (props) => {
                             <h1>{Math.floor(timer() / 20) + 1}s</h1>
                         </div>
                         <div class={`${styles.grid} ${styles.team}`}>
-                            <For each={picklist2}>{(id, i) => id2Card(id, i(), 16)}</For>
+                            <For each={picklist2}>{(id, i) => id2Card(id, i(), 20)}</For>
                         </div>
                     </div>
                     <Toaster/>

@@ -9,12 +9,12 @@ import {
     p1Info,
     p2Info, pick, playerTurn, selectedCharacters,
     setBanList1, setBanList2, setChatHistory, setGameEnded,
-    setLoading,
+    setLoading, setMaxCharPerTeam,
     setP1Info,
     setp2Info, setPick, setPickList1, setPickList2,
     setPlayerTurn,
     setResMsg, setSelectedCharacters, setTimer, timer,
-    setGameSetting, banlist1, gameSetting, delayTimer, setDelayTimer
+    setGameSetting, banlist1, gameSetting, delayTimer, setDelayTimer, picklist1, maxCharPerTeam
 } from "~/game/game_state";
 import {chosenCharacter, setTargetCard} from "~/data/store";
 import {TargetCard2TurnMap} from "~/data/turn_info";
@@ -28,6 +28,7 @@ const handleMsg = (data: string) => {
 
     // handle response message object
     const msg_obj = parseResMsg(data)
+    console.log(data)
     processMsg(msg_obj)
     // console.log(msg_obj)
 }
@@ -118,11 +119,20 @@ function setGameTimer(gs: any) {
 
 function GameSettingUpdate(gs: any) {
     const num_ban = parseInt(gs.settings.num_ban)
+    const soMode = gs.settings.so_mode;
+
     setGameSetting("ban_number", num_ban)
+    setGameSetting("so_mode", soMode)
 
     if (banlist1.length != num_ban) {
         setBanList1(Array.from({length: num_ban}))
         setBanList2(Array.from({length: num_ban}))
+    }
+
+    if (soMode && picklist1.length < 12) {
+        setMaxCharPerTeam(12)
+        setPickList1(Array.from({length: 12}))
+        setPickList2(Array.from({length: 12}))
     }
 }
 
@@ -178,13 +188,13 @@ const BoardUpdate = (gs: any) => {
     // Update p1_pick
     const p1_pick = gs.board.p_1_pick
     if (p1_pick) {
-        setPickList1(createTeamArray(p1_pick, 8))
+        setPickList1(createTeamArray(p1_pick, maxCharPerTeam()))
     }
 
     // Update p1_pick
     const p2_pick = gs.board.p_2_pick
     if (p2_pick) {
-        setPickList2(createTeamArray(p2_pick, 8))
+        setPickList2(createTeamArray(p2_pick, maxCharPerTeam()))
     }
 }
 

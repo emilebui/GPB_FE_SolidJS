@@ -7,6 +7,7 @@ const DEFAULT_GAME_SETTING: GameSetting = {
     casual: false,
     ban_number: 4,
     delay: "0",
+    so_mode: false,
 }
 
 const EmptyMsg = {type: -1, data: "", message: "", info: null}
@@ -25,6 +26,8 @@ const [gameEnded, setGameEnded] = createSignal(false)
 
 const [p1Info, setP1Info] = createStore<Player>({...EmptyPlayer, side: Side.LEFT})
 const [p2Info, setp2Info] = createStore<Player>({...EmptyPlayer, side: Side.RIGHT})
+
+const [maxCharPerTeam, setMaxCharPerTeam] = createSignal(8)
 
 const  [selectedCharacters, setSelectedCharacters] = createStore<GenshinCharacter['id'][]>([])
 const [banlist1, setBanList1] = createStore<GenshinCharacter['id'][]>(Array.from({length: 1}))
@@ -75,5 +78,7 @@ export {
     gameSetting,
     setGameSetting,
     delayTimer,
-    setDelayTimer
+    setDelayTimer,
+    maxCharPerTeam,
+    setMaxCharPerTeam
 }

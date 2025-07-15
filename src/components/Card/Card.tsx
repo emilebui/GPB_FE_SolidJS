@@ -38,6 +38,7 @@ const ShellCard: ParentComponent<IShellCard> = props => {
         [styles.target]: props.index === targetCard(),
       }}
     >
+        {/*<span>{props.index}</span>*/}
       {props.children}
     </div>
   );
