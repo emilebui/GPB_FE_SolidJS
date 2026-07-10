@@ -1277,4 +1277,15 @@ export const characters: GenshinCharacter[] = [
     selected: false,
     collab: false,
   },
+  {
+    id: 117,
+    fullName: 'Sandrone',
+    shortName: 'Sandrone',
+    stars: 5,
+    elements: ['cryo'],
+    weapon: 'claymore',
+    gender: ['F'],
+    selected: false,
+    collab: false,
+  },
 ];
